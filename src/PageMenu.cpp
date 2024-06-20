@@ -4,9 +4,9 @@ PageMenu::~PageMenu() {
 	pages->release();
 }
 
-PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize){
+PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize, bool forceContentSize){
     auto node = new PageMenu();
-    if (!node->init(menu, elementCount, layout, innerSize)) {
+    if (!node->init(menu, elementCount, layout, innerSize, forceContentSize)) {
         CC_SAFE_DELETE(node);
         return nullptr;
     }
@@ -14,7 +14,7 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, CCSiz
     return node;
 }
 
-bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize){
+bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize, bool forceContentSize){
     CCArray* children = menu->getChildren();
 
     CCSize winSize = CCDirector::get()->getWinSize();
@@ -36,6 +36,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize inner
     pages = CCArray::create();
     pages->retain();
 
+    CCSize contentSize = typeinfo_cast<CCNode*>(children->objectAtIndex(0))->getContentSize();
+
     for(int i = 0; i < pageCount; i++){
         CCMenu* searchPage = CCMenu::create();
         searchPage->setContentSize(innerSize);
@@ -50,6 +52,16 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize inner
             }
             CCNode* child = typeinfo_cast<CCNode*>(children->objectAtIndex(0));
             menu->removeChild(child, false);
+            if(!child->isVisible()) elementCount++;
+
+            if(forceContentSize){
+                child->setContentSize(contentSize);
+                if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
+                    spr->setAnchorPoint({1, 0});
+                    spr->setPosition({contentSize.width, 0});
+                }
+            }
+
             searchPage->addChild(child);
         }
         if(searchPage->getChildrenCount() > 0){

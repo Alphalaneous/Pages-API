@@ -16,8 +16,8 @@ private:
 
 public:
     ~PageMenu();
-    static PageMenu* create(CCMenu* menu, int elementCount, Layout* layout,  CCSize innerSize);
-    bool init(CCMenu* menu, int elementCount, Layout* layout,  CCSize innerSize);
+    static PageMenu* create(CCMenu* menu, int elementCount, Layout* layout,  CCSize innerSize, bool forceContentSize);
+    bool init(CCMenu* menu, int elementCount, Layout* layout,  CCSize innerSize, bool forceContentSize);
     void goRight(CCObject* obj);
     void goLeft(CCObject* obj);
     void setPageVisible();

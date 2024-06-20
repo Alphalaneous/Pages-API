@@ -21,13 +21,14 @@ class $modify(LevelSearchLayer) {
         layout->setCrossAxisOverflow(false);
         layout->setAxisAlignment(AxisAlignment::Center);
         layout->setCrossAxisAlignment(AxisAlignment::Center);
+		layout->ignoreInvisibleChildren(true);
 
 		auto quickSearchMenu = getChildByID("quick-search-menu");
 		quickSearchMenu->setContentSize({365, 116});
 		quickSearchMenu->ignoreAnchorPointForPosition(false);
 		quickSearchMenu->setPosition({quickSearchMenu->getPosition().x, quickSearchMenu->getPosition().y + 28});
 
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout, {348, 102});
+		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout, {348, 102}, false);
 
 		addChild(menuPage);
 
@@ -57,8 +58,9 @@ class $modify(CreatorLayer) {
         layout->setCrossAxisReverse(true);
 		layout->setGap(6);
 		layout->setAutoScale(true);
+		layout->ignoreInvisibleChildren(true);
 
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, layout, {450, 310});
+		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, layout, {450, 310}, true);
 		addChild(menuPage);
 
 		return true;

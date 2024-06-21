@@ -4,9 +4,9 @@ PageMenu::~PageMenu() {
 	pages->release();
 }
 
-PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize, bool forceContentSize){
+PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize){
     auto node = new PageMenu();
-    if (!node->init(menu, elementCount, layout, innerSize, forceContentSize)) {
+    if (!node->init(menu, elementCount, layout, forceContentSize)) {
         CC_SAFE_DELETE(node);
         return nullptr;
     }
@@ -14,7 +14,7 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, CCSiz
     return node;
 }
 
-bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize innerSize, bool forceContentSize){
+bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize){
     CCArray* children = menu->getChildren();
 
     CCSize winSize = CCDirector::get()->getWinSize();
@@ -25,13 +25,14 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize inner
     innerNode->ignoreAnchorPointForPosition(menu->isIgnoreAnchorPointForPosition());
     innerNode->setAnchorPoint(menu->getAnchorPoint());
     innerNode->setID("pages");
+    innerNode->setScale(menu->getScale());
 
     setContentSize(winSize);
     setID(menu->getID());
-
+    
     int idx = 0;
 
-    int pageCount = std::ceil(children->count()/9.0f);
+    int pageCount = std::ceil(children->count()/(float)elementCount);
 
     pages = CCArray::create();
     pages->retain();
@@ -40,10 +41,10 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, CCSize inner
 
     for(int i = 0; i < pageCount; i++){
         CCMenu* searchPage = CCMenu::create();
-        searchPage->setContentSize(innerSize);
         CCSize menuSize = menu->getContentSize();
         searchPage->setPosition({menuSize.width/2, menuSize.height/2});
-
+        searchPage->setScale(menu->getScale());
+        searchPage->setContentSize(menu->getContentSize());
 
         for(int j = 0; j < elementCount; j++){
 

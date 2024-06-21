@@ -5,8 +5,8 @@
 
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
-#include "PageMenu.h"
-#include "Macros.h"
+#include "../PageMenu.h"
+#include "../Macros.h"
 
 using namespace geode::prelude;
 

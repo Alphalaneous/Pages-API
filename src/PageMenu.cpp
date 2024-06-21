@@ -1,7 +1,7 @@
 #include "PageMenu.h"
 
 PageMenu::~PageMenu() {
-	pages->release();
+	m_pages->release();
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize){
@@ -34,8 +34,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, bool forceCo
 
     int pageCount = std::ceil(children->count()/(float)elementCount);
 
-    pages = CCArray::create();
-    pages->retain();
+    m_pages = CCArray::create();
+    m_pages->retain();
 
     CCSize contentSize = typeinfo_cast<CCNode*>(children->objectAtIndex(0))->getContentSize();
 
@@ -69,16 +69,16 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, bool forceCo
             searchPage->setLayout(layout);
             searchPage->updateLayout();
             searchPage->setVisible(false);
-            pages->addObject(searchPage);
+            m_pages->addObject(searchPage);
         }
     }
 
-    for(CCMenu* page : CCArrayExt<CCMenu*>(pages)){
+    for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){
         innerNode->addChild(page);
     }
 
-    if(pages->count() > 0){
-        typeinfo_cast<CCNode*>(pages->objectAtIndex(0))->setVisible(true);
+    if(m_pages->count() > 0){
+        typeinfo_cast<CCNode*>(m_pages->objectAtIndex(0))->setVisible(true);
     }
 
     float btnDistance = 15.0f;
@@ -88,32 +88,32 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, bool forceCo
     CCSprite* nextSpr = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
     nextSpr->setFlipX(true);
     nextSpr->setScale(btnScale);
-    nextButton = CCMenuItemSpriteExtra::create(nextSpr, this, menu_selector(PageMenu::goRight));
+    m_nextButton = CCMenuItemSpriteExtra::create(nextSpr, this, menu_selector(PageMenu::goRight));
 
     float xPosNext = innerNode->getContentSize().width + btnDistance;
-    nextButton->setPosition({xPosNext, yPos});
+    m_nextButton->setPosition({xPosNext, yPos});
 
 
     CCSprite* prevSpr = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
     prevSpr->setScale(btnScale);
-    prevButton = CCMenuItemSpriteExtra::create(prevSpr, this, menu_selector(PageMenu::goLeft));
+    m_prevButton = CCMenuItemSpriteExtra::create(prevSpr, this, menu_selector(PageMenu::goLeft));
 
     float xPosPrev = -btnDistance;
-    prevButton->setPosition({xPosPrev, yPos});
+    m_prevButton->setPosition({xPosPrev, yPos});
 
     CCMenu* pageButtons = CCMenu::create();
     pageButtons->setID("page-navigation-menu");
     pageButtons->setContentSize(innerNode->getContentSize());
     pageButtons->setPosition(innerNode->getPosition());
     pageButtons->ignoreAnchorPointForPosition(false);
-    pageButtons->addChild(nextButton);
-    pageButtons->addChild(prevButton);
+    pageButtons->addChild(m_nextButton);
+    pageButtons->addChild(m_prevButton);
 
     addChild(pageButtons);
 
-    if(pages->count() <= 1){
-        prevButton->setVisible(false);
-        nextButton->setVisible(false);
+    if(m_pages->count() <= 1){
+        m_prevButton->setVisible(false);
+        m_nextButton->setVisible(false);
     }
 
     menu->removeFromParentAndCleanup(false);
@@ -124,10 +124,10 @@ bool PageMenu::init(CCMenu* menu, int elementCount, Layout* layout, bool forceCo
 
 void PageMenu::goLeft(CCObject* obj){
 		
-    page--;
+    m_page--;
 
-    if(page < 0){
-        page = pages->count()-1;
+    if(m_page < 0){
+        m_page = m_pages->count()-1;
     }
     
     setPageVisible();
@@ -135,21 +135,27 @@ void PageMenu::goLeft(CCObject* obj){
 
 void PageMenu::goRight(CCObject* obj){
 		
-    page++;
-    prevButton->setVisible(true);
+    m_page++;
+    m_prevButton->setVisible(true);
 
-    if(page > pages->count()-1){
-        page = 0;
+    if(m_page > m_pages->count()-1){
+        m_page = 0;
     }
     setPageVisible();
 }
 
 void PageMenu::setPageVisible(){
-    for(CCMenu* page : CCArrayExt<CCMenu*>(pages)){
+    for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){
         page->setVisible(false);
     }
 
-    if(pages->count() > 0){
-        typeinfo_cast<CCNode*>(pages->objectAtIndex(page))->setVisible(true);
+    if(m_pages->count() > 0){
+        typeinfo_cast<CCNode*>(m_pages->objectAtIndex(m_page))->setVisible(true);
+    }
+}
+
+void PageMenu::scaleAtMax(){
+    if(m_pages->count() > 0){
+        setScale(0.9f);
     }
 }

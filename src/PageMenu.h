@@ -9,18 +9,19 @@ using namespace geode::prelude;
 class PageMenu : public CCMenu {
 
 private:
-    int page = 0;
-    CCMenuItemSpriteExtra* nextButton;
-    CCMenuItemSpriteExtra* prevButton;
-    CCArray* pages;
+    int m_page = 0;
+    CCMenuItemSpriteExtra* m_nextButton;
+    CCMenuItemSpriteExtra* m_prevButton;
+    CCArray* m_pages;
 
 public:
     ~PageMenu();
-    static PageMenu* create(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize);
+    static PageMenu* create(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize = false);
     bool init(CCMenu* menu, int elementCount, Layout* layout, bool forceContentSize);
     void goRight(CCObject* obj);
     void goLeft(CCObject* obj);
     void setPageVisible();
+    void scaleAtMax();
 };
 
 #endif

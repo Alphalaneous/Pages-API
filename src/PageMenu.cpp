@@ -155,7 +155,7 @@ void PageMenu::setPageVisible(){
 }
 
 void PageMenu::scaleAtMax(){
-    if(m_pages->count() > 0){
+    if(m_pages->count() > 1){
         setScale(0.9f);
     }
 }

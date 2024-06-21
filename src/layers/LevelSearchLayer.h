@@ -5,7 +5,7 @@
 
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelSearchLayer.hpp>
-#include "../PageMenu.h"
+#include "../../include/PageMenu.h"
 #include "../Macros.h"
 
 using namespace geode::prelude;
@@ -32,6 +32,7 @@ class $modify(PageLevelSearchLayer, LevelSearchLayer) {
 		quickSearchMenu->setPosition({quickSearchMenu->getPosition().x, quickSearchMenu->getPosition().y + 28});
 
 		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout);
+		menuPage->setPageLayout(layout);
 
 		addChild(menuPage);
 

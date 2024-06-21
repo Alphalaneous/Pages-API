@@ -5,7 +5,7 @@
 
 #include <Geode/Geode.hpp>
 #include <Geode/modify/MenuLayer.hpp>
-#include "../PageMenu.h"
+#include "../../include/PageMenu.h"
 #include "../Macros.h"
 
 using namespace geode::prelude;
@@ -21,24 +21,21 @@ class $modify(PageMenuLayer, MenuLayer) {
 
 		auto bottomMenu = getChildByID("bottom-menu");
 
-		int childrenCount = bottomMenu->getChildrenCount();
-
-		RowLayout* layout = RowLayout::create();
-        layout->setGrowCrossAxis(false);
-        layout->setCrossAxisOverflow(true);
-        layout->setAxisAlignment(AxisAlignment::Center);
-        layout->setCrossAxisAlignment(AxisAlignment::Center);
-        layout->setCrossAxisLineAlignment(AxisAlignment::Center);
-        layout->setCrossAxisReverse(false);
-		layout->setGap(5);
-		layout->setAutoScale(true);
-		layout->ignoreInvisibleChildren(true);
-
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), 6, layout);
+		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), 6);
 		menuPage->setAnchorPoint({0.5, 0});
-		menuPage->scaleAtMax();
+		menuPage->scaleWhenFull();
 
 		addChild(menuPage);
+
+		auto rightMenu = getChildByID("right-side-menu");
+
+		PageMenu* menuPageR = PageMenu::create(typeinfo_cast<CCMenu*>(rightMenu), 3);
+		menuPageR->setAnchorPoint({1, 0.5});
+		menuPageR->setNavGap(2);
+		menuPageR->setOrientation(PageOrientation::VERTICAL);
+		menuPageR->scaleWhenFull();
+
+		addChild(menuPageR);
 
 		return true;
 	}

@@ -5,7 +5,7 @@
 
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CreatorLayer.hpp>
-#include "../PageMenu.h"
+#include "../../include/PageMenu.h"
 #include "../Macros.h"
 
 using namespace geode::prelude;
@@ -21,18 +21,7 @@ class $modify(PageCreatorLayer, CreatorLayer) {
 
 		auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
 
-		RowLayout* layout = RowLayout::create();
-        layout->setGrowCrossAxis(true);
-        layout->setCrossAxisOverflow(false);
-        layout->setAxisAlignment(AxisAlignment::Center);
-        layout->setCrossAxisAlignment(AxisAlignment::Center);
-        layout->setCrossAxisLineAlignment(AxisAlignment::Center);
-        layout->setCrossAxisReverse(true);
-		layout->setGap(6);
-		layout->setAutoScale(true);
-		layout->ignoreInvisibleChildren(true);
-
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, layout, true);
+		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
 		addChild(menuPage);
 
 		return true;

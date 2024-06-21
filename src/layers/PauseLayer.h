@@ -5,7 +5,7 @@
 
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
-#include "../PageMenu.h"
+#include "../../include/PageMenu.h"
 #include "../Macros.h"
 
 using namespace geode::prelude;
@@ -32,9 +32,9 @@ class $modify(PagePauseLayer, PauseLayer) {
 		layout->setGap(10);
 		layout->ignoreInvisibleChildren(true);
 
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(centerMenu), 6, layout);
-		menuPage->scaleAtMax();
-		
+		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(centerMenu), 6);
+		menuPage->scaleWhenFull();
+		menuPage->setPageLayout(layout);
 		addChild(menuPage);
 	}
 };

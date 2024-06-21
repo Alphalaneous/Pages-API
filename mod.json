@@ -5,7 +5,7 @@
 		"android": "2.206",
 		"mac": "2.206"
 	},
-	"version": "v1.0.4",
+	"version": "v1.0.5",
 	"id": "alphalaneous.pages_api",
 	"name": "Pages API",
 	"developer": "Alphalaneous",
@@ -16,5 +16,10 @@
             "version": ">=v1.12.0-alpha.2",
             "importance": "required"
         }
-    ]
+    ],
+	"api": {
+		"include": [
+			"include/*.h"
+		]
+	}
 }

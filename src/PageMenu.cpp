@@ -23,13 +23,15 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_originalMenu = menu;
     m_innerNode = CCNode::create();
     m_innerNode->setContentSize(menu->getContentSize());
-    m_innerNode->setPosition(menu->getPosition());
-    m_innerNode->ignoreAnchorPointForPosition(menu->isIgnoreAnchorPointForPosition());
+    //m_innerNode->setPosition(menu->getPosition());
+    m_innerNode->ignoreAnchorPointForPosition(true);
     m_innerNode->setAnchorPoint(menu->getAnchorPoint());
     m_innerNode->setID("pages");
     m_innerNode->setScale(menu->getScale());
 
-    setContentSize(winSize);
+    ignoreAnchorPointForPosition(false);
+    setContentSize(menu->getContentSize());
+    setPosition(menu->getPosition());
     setID(menu->getID());
     m_layout = menu->getLayout();
     if (m_layout) {
@@ -91,12 +93,12 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_prevButton = CCMenuItemSpriteExtra::create(m_prevSprite, this, menu_selector(PageMenu::goLeft));
 
     setNavGap(m_navGap);
-
+    setOrientation(PageOrientation::HORIZONTAL);
     CCMenu* pageButtons = CCMenu::create();
     pageButtons->setID("page-navigation-menu");
-    pageButtons->setContentSize(m_innerNode->getContentSize());
+    pageButtons->setContentSize(getContentSize());
     pageButtons->setPosition(m_innerNode->getPosition());
-    pageButtons->ignoreAnchorPointForPosition(false);
+    pageButtons->ignoreAnchorPointForPosition(true);
     pageButtons->addChild(m_nextButton);
     pageButtons->addChild(m_prevButton);
 
@@ -158,6 +160,11 @@ void PageMenu::setPageLayout(Layout* layout) {
 }
 
 void PageMenu::setOrientation(PageOrientation orientation) {
+
+    if(m_originalMenu->getUserObject("orientation")){
+        orientation = (PageOrientation)typeinfo_cast<CCInteger*>(m_originalMenu->getUserObject("orientation"))->getValue();
+    }
+
     if (orientation == PageOrientation::HORIZONTAL) {
         m_nextSprite->setRotation(0);
         m_prevSprite->setRotation(0);
@@ -173,6 +180,10 @@ void PageMenu::setOrientation(PageOrientation orientation) {
 
 void PageMenu::setNavGap(float gapSize) {
 
+    if(m_originalMenu->getUserObject("gap")){
+        gapSize = typeinfo_cast<CCFloat*>(m_originalMenu->getUserObject("gap"))->getValue();
+    }
+
     m_navGap = gapSize;
 
     float yPosNext;
@@ -181,15 +192,15 @@ void PageMenu::setNavGap(float gapSize) {
     float xPosPrev;
 
     if (m_pageOrientation == PageOrientation::VERTICAL) {
-        xPosNext = m_innerNode->getContentSize().width/2;
-        xPosPrev = m_innerNode->getContentSize().width/2;
-        yPosNext = m_innerNode->getContentSize().height + gapSize;
+        xPosNext = getContentSize().width/2;
+        xPosPrev = getContentSize().width/2;
+        yPosNext = getContentSize().height + gapSize;
         yPosPrev = -gapSize;
     }
     else {
-        yPosNext = m_innerNode->getContentSize().height/2;
-        yPosPrev = m_innerNode->getContentSize().height/2;
-        xPosNext = m_innerNode->getContentSize().width + gapSize;
+        yPosNext = getContentSize().height/2;
+        yPosPrev = getContentSize().height/2;
+        xPosNext = getContentSize().width + gapSize;
         xPosPrev = -gapSize;
     }
 

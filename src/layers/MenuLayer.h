@@ -22,7 +22,6 @@ class $modify(PageMenuLayer, MenuLayer) {
 		auto bottomMenu = getChildByID("bottom-menu");
 
 		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), 6);
-		menuPage->setAnchorPoint({0.5, 0});
 		menuPage->scaleWhenFull();
 
 		addChild(menuPage);
@@ -30,7 +29,6 @@ class $modify(PageMenuLayer, MenuLayer) {
 		auto rightMenu = getChildByID("right-side-menu");
 
 		PageMenu* menuPageR = PageMenu::create(typeinfo_cast<CCMenu*>(rightMenu), 3);
-		menuPageR->setAnchorPoint({1, 0.5});
 		menuPageR->setNavGap(2);
 		menuPageR->setOrientation(PageOrientation::VERTICAL);
 		menuPageR->scaleWhenFull();

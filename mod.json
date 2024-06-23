@@ -1,11 +1,11 @@
 {
-	"geode": "3.0.0-beta.4",
+	"geode": "3.0.0",
 	"gd": {
 		"win": "2.206",
 		"android": "2.206",
 		"mac": "2.206"
 	},
-	"version": "v1.0.5",
+	"version": "v1.0.6",
 	"id": "alphalaneous.pages_api",
 	"name": "Pages API",
 	"developer": "Alphalaneous",

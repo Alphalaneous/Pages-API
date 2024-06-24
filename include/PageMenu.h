@@ -4,11 +4,22 @@
 #define MENUPAGE_H
 
 #include <Geode/Geode.hpp>
+
+#ifdef GEODE_IS_WINDOWS
+    #ifdef ALPHALANEOUS_PAGES_API_EXPORTING
+        #define PAGES_API_DLL __declspec(dllexport)
+    #else
+        #define PAGES_API_DLL __declspec(dllimport)
+    #endif
+    #else
+        #define PAGES_API_DLL
+#endif
+
 using namespace geode::prelude;
 
-enum PageOrientation{ VERTICAL, HORIZONTAL };
+enum PAGES_API_DLL PageOrientation{ VERTICAL, HORIZONTAL };
 
-class PageMenu : public CCMenu {
+class PAGES_API_DLL PageMenu : public CCMenu {
 
 private:
     int m_page = 0;

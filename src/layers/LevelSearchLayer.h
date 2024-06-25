@@ -18,23 +18,25 @@ class $modify(PageLevelSearchLayer, LevelSearchLayer) {
 		if (!LevelSearchLayer::init(isLists)) {
 			return false;
 		}
+		if(Mod::get()->getSettingValue<bool>("level-search-layer-quick-search-menu")){
 		
-		RowLayout* layout = RowLayout::create();
-        layout->setGrowCrossAxis(true);
-        layout->setCrossAxisOverflow(false);
-        layout->setAxisAlignment(AxisAlignment::Center);
-        layout->setCrossAxisAlignment(AxisAlignment::Center);
-		layout->ignoreInvisibleChildren(true);
+			RowLayout* layout = RowLayout::create();
+			layout->setGrowCrossAxis(true);
+			layout->setCrossAxisOverflow(false);
+			layout->setAxisAlignment(AxisAlignment::Center);
+			layout->setCrossAxisAlignment(AxisAlignment::Center);
+			layout->ignoreInvisibleChildren(true);
 
-		auto quickSearchMenu = getChildByID("quick-search-menu");
-		quickSearchMenu->setContentSize({365, 116});
-		quickSearchMenu->ignoreAnchorPointForPosition(false);
-		quickSearchMenu->setPosition({quickSearchMenu->getPosition().x, quickSearchMenu->getPosition().y + 28});
+			auto quickSearchMenu = getChildByID("quick-search-menu");
+			quickSearchMenu->setContentSize({365, 116});
+			quickSearchMenu->ignoreAnchorPointForPosition(false);
+			quickSearchMenu->setPosition({quickSearchMenu->getPosition().x, quickSearchMenu->getPosition().y + 28});
 
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout);
-		menuPage->setPageLayout(layout);
+			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout);
+			menuPage->setPageLayout(layout);
 
-		addChild(menuPage);
+			addChild(menuPage);
+		}
 
 		return true;
 	}

@@ -1,11 +1,11 @@
 {
-	"geode": "3.0.0",
+	"geode": "3.1.0",
 	"gd": {
 		"win": "2.206",
 		"android": "2.206",
 		"mac": "2.206"
 	},
-	"version": "v1.0.7",
+	"version": "v1.0.8",
 	"id": "alphalaneous.pages_api",
 	"name": "Pages API",
 	"developer": "Alphalaneous",
@@ -21,5 +21,37 @@
 		"include": [
 			"include/*.h"
 		]
+	},
+	"settings": {
+		"menulayer-right-menu": {
+			"name": "MenuLayer Right Menu",
+			"description": "Enable pages on the right menu of the MenuLayer",
+			"type": "bool",
+			"default": true
+		},
+		"menulayer-bottom-menu": {
+			"name": "MenuLayer Bottom Menu",
+			"description": "Enable pages on the bottom menu of the MenuLayer",
+			"type": "bool",
+			"default": true
+		},
+		"creator-layer-menu": {
+			"name": "CreatorLayer Menu",
+			"description": "Enable pages on the CreatorLayer menu",
+			"type": "bool",
+			"default": true
+		},
+		"level-search-layer-quick-search-menu": {
+			"name": "LevelSearchLayer Quick Search Menu",
+			"description": "Enable pages on the LevelSearchLayer Quick Search menu",
+			"type": "bool",
+			"default": true
+		},
+		"pause-layer-menu": {
+			"name": "PauseLayer Menu",
+			"description": "Enable pages on the PauseLayer menu",
+			"type": "bool",
+			"default": true
+		}
 	}
 }

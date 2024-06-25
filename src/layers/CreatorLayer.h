@@ -19,10 +19,12 @@ class $modify(PageCreatorLayer, CreatorLayer) {
 			return false;
 		}
 
-		auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
+		if(Mod::get()->getSettingValue<bool>("creator-layer-menu")){
+			auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
 
-		PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
-		addChild(menuPage);
+			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
+			addChild(menuPage);
+		}
 
 		return true;
 	}

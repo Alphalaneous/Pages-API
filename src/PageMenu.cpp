@@ -1,7 +1,10 @@
 #include "../include/PageMenu.h"
+#include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
 	m_pages->release();
+    m_children->release();
+
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize) {
@@ -15,19 +18,56 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize
 }
 
 bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
-    CCArray* children = menu->getChildren();
+
+    m_children = CCArray::create();
+    for(CCNode* node : CCArrayExt<CCNode*>(menu->getChildren())){
+        m_children->addObject(node);
+    }
+    m_children->retain();
 
     CCSize winSize = CCDirector::get()->getWinSize();
 
     m_maxCount = elementCount;
     m_originalMenu = menu;
     m_innerNode = CCNode::create();
-    m_innerNode->setContentSize(menu->getContentSize());
+    m_innerNode->setContentSize(menu->getScaledContentSize());
     //m_innerNode->setPosition(menu->getPosition());
     m_innerNode->ignoreAnchorPointForPosition(true);
     m_innerNode->setAnchorPoint(menu->getAnchorPoint());
     m_innerNode->setID("pages");
     m_innerNode->setScale(menu->getScale());
+
+    float scaleFactor = 1.2f;
+
+    m_background = CCScale9Sprite::create("square02_001.png");
+    m_background->setContentSize({(m_innerNode->getContentSize().width + 10) * scaleFactor, (m_innerNode->getContentSize().height + 10) * scaleFactor});
+    m_background->setPosition({m_innerNode->getContentSize().width/2, m_innerNode->getContentSize().height/2});
+    m_background->setOpacity(0.0f);
+    m_background->setScale(1/scaleFactor);
+    addChild(m_background);
+
+    float buttonScaleFactor = 3.5f;
+
+    CCSize buttonSize = {30, 16};
+
+    m_doneButton = CCMenuItem::create(this, menu_selector(PageMenu::stopEditing));
+    m_buttonBG = CCScale9Sprite::create("square02_001.png");
+    m_buttonBG->setPosition({buttonSize.width/2, buttonSize.height/2});
+    m_buttonBG->setContentSize({buttonSize.width * buttonScaleFactor, buttonSize.height * buttonScaleFactor});
+    m_buttonBG->setScale(1/buttonScaleFactor);
+
+    m_doneLabel = CCLabelBMFont::create("Done", "chatFont.fnt");
+    m_doneLabel->setPosition({buttonSize.width/2, buttonSize.height/2});
+    m_doneLabel->setScale(0.70f);
+    m_doneLabel->setZOrder(1);
+    m_doneButton->setPosition({(m_innerNode->getContentSize().width + 10/2) - buttonSize.width/2, (m_innerNode->getContentSize().height + 10/2) + buttonSize.height/2 + 1.5f});
+    m_doneButton->setContentSize({buttonSize.width, buttonSize.height});
+    m_doneButton->addChild(m_buttonBG);
+    m_doneButton->addChild(m_doneLabel);
+
+
+    m_doneLabel->setOpacity(0);
+    m_buttonBG->setOpacity(0);
 
     ignoreAnchorPointForPosition(false);
     setContentSize(menu->getContentSize());
@@ -38,11 +78,11 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 	    m_layout->ignoreInvisibleChildren(true);
     }
 
-    CCSize contentSize = typeinfo_cast<CCNode*>(children->objectAtIndex(0))->getContentSize();
+    CCSize contentSize = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))->getContentSize();
 
     int idx = 0;
 
-    int pageCount = std::ceil(children->count()/(float)elementCount);
+    int pageCount = std::ceil(m_children->count()/(float)elementCount);
 
     m_pages = CCArray::create();
     m_pages->retain();
@@ -51,10 +91,12 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
         CCMenu* searchPage = createPage();
         for (int j = 0; j < elementCount; j++) {
-            if (children->count() == 0) {
+            if (menu->getChildren()->count() == 0) {
                 break;
             }
-            CCNode* child = typeinfo_cast<CCNode*>(children->objectAtIndex(0));
+            CCNode* child = typeinfo_cast<CCNode*>(menu->getChildren()->objectAtIndex(0));
+            m_children->addObject(child);
+            child->setUserObject("page-menu", this);
             menu->removeChild(child, false);
             if (!child->isVisible()) elementCount++;
 
@@ -102,6 +144,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     pageButtons->addChild(m_nextButton);
     pageButtons->addChild(m_prevButton);
 
+    pageButtons->addChild(m_doneButton);
+
     addChild(pageButtons);
 
     if (m_pages->count() <= 1) {
@@ -133,6 +177,8 @@ void PageMenu::addPagedChild(CCNode* child) {
 
     bool childWasAdded = false;
     if (m_maxCount == 0) return;
+    child->setUserObject("page-menu", this);
+    m_children->addObject(child);
 
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
         if (page->getChildrenCount() < m_maxCount) {
@@ -242,7 +288,7 @@ void PageMenu::setPageVisible() {
 
 void PageMenu::scaleWhenFull() {
     if (m_pages->count() > 1) {
-        setScale(0.9f);
+        setScale(0.85f);
     }
 }
 
@@ -256,4 +302,37 @@ float PageMenu::getNavGap() {
 
 PageOrientation PageMenu::getPageOrientation() {
     return m_pageOrientation;
+}
+
+void PageMenu::startShakeChildren() {
+    for(PageCCMenuItemSpriteExtra* child : CCArrayExt<PageCCMenuItemSpriteExtra*>(m_children)){
+        child->startShakeAnimation();
+    }
+}
+
+void PageMenu::stopShakeChildren() {
+    for(PageCCMenuItemSpriteExtra* child : CCArrayExt<PageCCMenuItemSpriteExtra*>(m_children)){
+        child->stopShakeAnimation();
+    }
+}
+
+void PageMenu::startEditing() {
+    if(!m_isEditing){
+        m_isEditing = true;
+        m_background->runAction(CCFadeTo::create(0.3, 125));
+        m_buttonBG->runAction(CCFadeTo::create(0.3, 125));
+        m_doneLabel->runAction(CCFadeTo::create(0.3, 255));
+        
+        startShakeChildren();
+    }
+}
+
+void PageMenu::stopEditing(CCObject* obj) {
+    if(m_isEditing){
+        m_isEditing = false;
+        m_background->runAction(CCFadeTo::create(0.3, 0));
+        m_buttonBG->runAction(CCFadeTo::create(0.3, 0));
+        m_doneLabel->runAction(CCFadeTo::create(0.3, 0));
+        stopShakeChildren();
+    }
 }

@@ -21,7 +21,7 @@ class $modify(PageCreatorLayer, CreatorLayer) {
 
 		if(Mod::get()->getSettingValue<bool>("creator-layer-menu")){
 			auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
-
+			creatorButtonsMenu->setContentSize({450, 270});
 			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
 			addChild(menuPage);
 		}

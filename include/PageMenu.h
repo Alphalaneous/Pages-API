@@ -25,8 +25,13 @@ private:
     int m_page = 0;
     int m_maxCount = 0;
     float m_navGap = 15;
+    bool m_isEditing = false;
     CCMenu* m_originalMenu;
+    CCArray* m_children;
     PageOrientation m_pageOrientation = PageOrientation::HORIZONTAL;
+    CCMenuItem* m_doneButton;
+    CCScale9Sprite* m_buttonBG;
+    CCLabelBMFont* m_doneLabel;
 
 public:
 
@@ -36,6 +41,7 @@ public:
     CCMenuItemSpriteExtra* m_prevButton;
     CCSprite* m_nextSprite;
     CCSprite* m_prevSprite;
+    CCScale9Sprite* m_background;
     CCArray* m_pages;
 
     ~PageMenu();
@@ -52,6 +58,11 @@ public:
     void setOrientation(PageOrientation orientation);
     void setPageLayout(Layout* layout);
     void addPagedChild(CCNode* child);
+    void startShakeChildren();
+    void stopShakeChildren();
+    void startEditing();
+    void stopEditing(CCObject* obj);
+
     CCMenu* createPage();
 };
 

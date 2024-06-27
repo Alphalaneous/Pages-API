@@ -50,6 +50,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
     CCSize buttonSize = {30, 16};
 
+    #ifdef IN_PROGRESS
+
     m_doneButton = CCMenuItem::create(this, menu_selector(PageMenu::stopEditing));
     m_buttonBG = CCScale9Sprite::create("square02_001.png");
     m_buttonBG->setPosition({buttonSize.width/2, buttonSize.height/2});
@@ -68,6 +70,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
     m_doneLabel->setOpacity(0);
     m_buttonBG->setOpacity(0);
+
+    #endif
 
     ignoreAnchorPointForPosition(false);
     setContentSize(menu->getContentSize());
@@ -144,8 +148,12 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     pageButtons->addChild(m_nextButton);
     pageButtons->addChild(m_prevButton);
 
+    #ifdef IN_PROGRESS
+
     pageButtons->addChild(m_doneButton);
 
+    #endif
+    
     addChild(pageButtons);
 
     if (m_pages->count() <= 1) {

@@ -10,6 +10,7 @@ on:
 
 env:
     Build_Workflow: multi-platform.yml
+    Version_Prefix: none # if this was set to "v" then github tags would be "5.2.6". - Set to "none" for no prefix. none would make the github tab be "5.2.6"
 
 
 jobs:
@@ -64,13 +65,15 @@ jobs:
                     if [[ "$filename" == *.geode ]]; then
                         base_name="${filename%.geode}"
                         echo "Found .geode file: $filename (base name: $base_name)"
-                        echo "modid=$base_name" >> GITHUB_OUTPUT
+                        echo "modid=$base_name" >> "$GITHUB_OUTPUT"
                         break
                     fi
                 done
             - name: Get Info
               id: info
-              run: python3 repo/.github/workflow-scripts/get-info.py
+              shell: bash
+              run: |
+                python3 repo/.github/workflow-scripts/get-info.py
               env:
                 MOD_ID: ${{ steps.getmodid.outputs.modid }}
             - name: Create Draft Release
@@ -78,8 +81,8 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                tag_name: Release-v${{ steps.info.outputs.version }}
-                name: Click Sounds v${{ steps.info.outputs.version }} for Geode
+                tag_name: ${{ env.Version_Prefix != 'none' && env.Version_Prefix || '' }}${{ steps.info.outputs.version }}
+                name: ${{ steps.info.outputs.modname }} v${{ steps.info.outputs.version }}
                 body: ${{ steps.info.outputs.cl }}
                 draft: true
                 files: |

@@ -19,6 +19,15 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize
 
 bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
+    if(CCObject* obj = menu->getUserObject("disable-pages")){
+        if (CCBool* disable = typeinfo_cast<CCBool*>(obj)){
+            if(disable->getValue()) {
+                m_isPage = false;
+                return true;
+            }
+        }
+    }
+
     m_children = CCArray::create();
     for(CCNode* node : CCArrayExt<CCNode*>(menu->getChildren())){
         m_children->addObject(node);
@@ -183,6 +192,8 @@ CCMenu* PageMenu::createPage() {
 
 void PageMenu::addPagedChild(CCNode* child) {
 
+    if(!m_isPage) return;
+
     bool childWasAdded = false;
     if (m_maxCount == 0) return;
     child->setUserObject("page-menu", this);
@@ -206,6 +217,9 @@ void PageMenu::addPagedChild(CCNode* child) {
 }
 
 void PageMenu::setPageLayout(Layout* layout) {
+
+    if(!m_isPage) return;
+
     m_layout = layout;
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
         page->setLayout(layout);
@@ -214,6 +228,8 @@ void PageMenu::setPageLayout(Layout* layout) {
 }
 
 void PageMenu::setOrientation(PageOrientation orientation) {
+
+    if(!m_isPage) return;
 
     if(m_originalMenu->getUserObject("orientation")){
         orientation = (PageOrientation)typeinfo_cast<CCInteger*>(m_originalMenu->getUserObject("orientation"))->getValue();
@@ -233,6 +249,8 @@ void PageMenu::setOrientation(PageOrientation orientation) {
 }
 
 void PageMenu::setNavGap(float gapSize) {
+
+    if(!m_isPage) return;
 
     if(m_originalMenu->getUserObject("gap")){
         gapSize = typeinfo_cast<CCFloat*>(m_originalMenu->getUserObject("gap"))->getValue();
@@ -285,6 +303,9 @@ void PageMenu::goRight(CCObject* obj) {
 }
 
 void PageMenu::setPageVisible() {
+
+    if(!m_isPage) return;
+
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
         page->setVisible(false);
     }
@@ -295,7 +316,18 @@ void PageMenu::setPageVisible() {
 }
 
 void PageMenu::scaleWhenFull() {
-    if (m_pages->count() > 1) {
+    
+    if(!m_isPage) return;
+
+    bool doShrink = true;
+
+    if(CCObject* obj = m_originalMenu->getUserObject("shrink-when-full")){
+        if (CCBool* shrink = typeinfo_cast<CCBool*>(obj)){
+            doShrink = shrink->getValue();
+        }
+    }
+
+    if (doShrink && m_pages->count() > 1) {
         setScale(0.85f);
     }
 }

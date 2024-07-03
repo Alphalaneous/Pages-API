@@ -26,6 +26,7 @@ private:
     int m_maxCount = 0;
     float m_navGap = 15;
     bool m_isEditing = false;
+    bool m_isPage = true;
     CCMenu* m_originalMenu;
     CCArray* m_children;
     PageOrientation m_pageOrientation = PageOrientation::HORIZONTAL;

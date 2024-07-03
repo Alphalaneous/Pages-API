@@ -2,9 +2,10 @@
 #include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
-	m_pages->release();
-    m_children->release();
-
+    if(m_isPage){
+        m_pages->release();
+        m_children->release();
+    }
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize) {

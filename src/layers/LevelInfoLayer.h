@@ -38,7 +38,9 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
 
 	void levelDownloadFinished(GJGameLevel* p0){
 		LevelInfoLayer::levelDownloadFinished(p0);
-		m_fields->m_leftSidePage->updatePage();
+		if(m_fields->m_leftSidePage){
+			m_fields->m_leftSidePage->updatePage();
+		}
 	}
 };
 

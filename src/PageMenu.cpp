@@ -143,11 +143,14 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 void PageMenu::updatePage() {
 
     if(!m_isPage) return;
+    if(!m_innerNode) return;
+    if(!m_pages) return;
+    if(!m_navMenu) return;
+    if(!m_children) return;
+    if(m_children->count() == 0) return;
 
     m_innerNode->removeAllChildrenWithCleanup(false);
     m_pages->removeAllObjects();
-
-    if(!m_children || m_children->count() == 0) return;
 
     CCSize contentSize = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))->getContentSize();
     int pageCount = std::ceil(m_children->count()/(float)m_maxCount);

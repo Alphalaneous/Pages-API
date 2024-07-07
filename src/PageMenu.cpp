@@ -2,9 +2,10 @@
 #include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
-	m_pages->release();
-    m_children->release();
-
+    if(m_isPage){
+        m_pages->release();
+        m_children->release();
+    }
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize) {
@@ -19,6 +20,15 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize
 
 bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
+    if(CCObject* obj = menu->getUserObject("disable-pages")){
+        if (CCBool* disable = typeinfo_cast<CCBool*>(obj)){
+            if(disable->getValue()) {
+                m_isPage = false;
+                return true;
+            }
+        }
+    }
+    m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
     for(CCNode* node : CCArrayExt<CCNode*>(menu->getChildren())){
         m_children->addObject(node);
@@ -91,44 +101,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_pages = CCArray::create();
     m_pages->retain();
 
-    for (int i = 0; i < pageCount; i++) {
-
-        CCMenu* searchPage = createPage();
-        for (int j = 0; j < elementCount; j++) {
-            if (menu->getChildren()->count() == 0) {
-                break;
-            }
-            CCNode* child = typeinfo_cast<CCNode*>(menu->getChildren()->objectAtIndex(0));
-            m_children->addObject(child);
-            child->setUserObject("page-menu", this);
-            menu->removeChild(child, false);
-            if (!child->isVisible()) elementCount++;
-
-            if (forceContentSize) {
-                child->setContentSize(contentSize);
-                if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
-                    spr->setAnchorPoint({1, 0});
-                    spr->setPosition({contentSize.width, 0});
-                }
-            }
-            searchPage->addChild(child);
-        }
-        if (searchPage->getChildrenCount() > 0) {
-            searchPage->updateLayout();
-            m_pages->addObject(searchPage);
-        }
-    }
-
-    for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
-        m_innerNode->addChild(page);
-    }
-
-    if (m_pages->count() > 0) {
-        typeinfo_cast<CCNode*>(m_pages->objectAtIndex(0))->setVisible(true);
-    }
-
     float btnScale = 0.6f;
-    
+
     m_nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
     m_nextSprite->setFlipX(true);
     m_nextSprite->setScale(btnScale);
@@ -138,50 +112,144 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_prevSprite->setScale(btnScale);
     m_prevButton = CCMenuItemSpriteExtra::create(m_prevSprite, this, menu_selector(PageMenu::goLeft));
 
+    m_navMenu = CCMenu::create();
+    m_navMenu->setID("page-navigation-menu");
+    m_navMenu->setContentSize(getContentSize());
+    m_navMenu->setPosition(m_innerNode->getPosition());
+    m_navMenu->ignoreAnchorPointForPosition(true);
+    m_navMenu->addChild(m_nextButton);
+    m_navMenu->addChild(m_prevButton);
+
+    menu->removeAllChildrenWithCleanup(false);
+
+    m_finishedInit = true;
+
+    updatePage();
     setNavGap(m_navGap);
     setOrientation(PageOrientation::HORIZONTAL);
-    CCMenu* pageButtons = CCMenu::create();
-    pageButtons->setID("page-navigation-menu");
-    pageButtons->setContentSize(getContentSize());
-    pageButtons->setPosition(m_innerNode->getPosition());
-    pageButtons->ignoreAnchorPointForPosition(true);
-    pageButtons->addChild(m_nextButton);
-    pageButtons->addChild(m_prevButton);
 
     #ifdef IN_PROGRESS
 
-    pageButtons->addChild(m_doneButton);
+    m_navMenu->addChild(m_doneButton);
 
     #endif
     
-    addChild(pageButtons);
-
-    if (m_pages->count() <= 1) {
-        m_prevButton->setVisible(false);
-        m_nextButton->setVisible(false);
-    }
-
     menu->removeFromParentAndCleanup(false);
+
+    addChild(m_navMenu);
     addChild(m_innerNode);
 
     return true;
 }
 
+void PageMenu::updatePage() {
+
+    if(!m_isPage) return;
+    if(!m_finishedInit) return;
+    if(!m_innerNode) return;
+    if(!m_pages) return;
+    if(!m_navMenu) return;
+    if(!m_children) return;
+    if(m_children->count() == 0) return;
+
+    if(m_innerNode->getChildrenCount() > 0){
+        m_innerNode->removeAllChildrenWithCleanup(false);
+    }
+    if(m_pages->count() > 0){
+        m_pages->removeAllObjects();
+    }
+
+    CCSize contentSize = {0, 0};
+
+    if(CCObject* obj = m_children->objectAtIndex(0)){
+        if(CCNode* node = typeinfo_cast<CCNode*>(obj)){
+            contentSize = node->getContentSize();
+        }
+    }
+
+    int pageCount = std::ceil(m_children->count()/(float)m_maxCount);
+    int elementCount = m_maxCount;
+    int childrenCount = m_children->count();
+    int pos = 0;
+
+    for (int i = 0; i < pageCount; i++) {
+
+        CCMenu* searchPage = createPage();
+        for (int j = 0; j < elementCount; j++) {
+
+            if (childrenCount == 0) {
+                break;
+            }
+
+            if(CCObject* obj = m_children->objectAtIndex(pos)){
+                if(CCNode* child = typeinfo_cast<CCNode*>(obj)) {
+                    child->setUserObject("page-menu", this);
+
+                    childrenCount--;
+                    if (!child->isVisible()) elementCount++;
+
+                    if (m_forceContentSize) {
+                        child->setContentSize(contentSize);
+                        if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
+                            spr->setAnchorPoint({1, 0});
+                            spr->setPosition({contentSize.width, 0});
+                        }
+                    }
+                    pos++;
+                    searchPage->addChild(child);
+                }
+            }
+        }
+        if (searchPage->getChildrenCount() > 0) {
+            searchPage->updateLayout();
+            m_pages->addObject(searchPage);
+        }
+    }
+
+    for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
+        if(page){
+            m_innerNode->addChild(page);
+        }
+    }
+
+    if (m_pages->count() > 0) {
+        
+        int page = 0;
+        if(m_pages->count() > m_page){
+            page = m_page;
+        }
+
+        if(CCObject* obj = m_pages->objectAtIndex(m_page)){
+            if(CCNode* node = typeinfo_cast<CCNode*>(obj)) {
+                node->setVisible(true);
+            }
+        }
+    }
+    if(m_navMenu){
+        m_navMenu->setVisible(m_pages->count() > 1);
+    }
+    setUniformScale(m_isUniformScale);
+}
+
 CCMenu* PageMenu::createPage() {
     CCMenu* searchPage = CCMenu::create();
-    CCSize menuSize = m_originalMenu->getContentSize();
-    searchPage->setPosition({menuSize.width/2, menuSize.height/2});
-    searchPage->setScale(m_originalMenu->getScale());
-    searchPage->setContentSize(m_originalMenu->getContentSize());
-    if (m_layout) {
-        searchPage->setLayout(m_layout);
-        searchPage->updateLayout();
+    if(m_originalMenu){
+        CCSize menuSize = m_originalMenu->getContentSize();
+        searchPage->setPosition({menuSize.width/2, menuSize.height/2});
+        searchPage->setScale(m_originalMenu->getScale());
+        searchPage->setContentSize(m_originalMenu->getContentSize());
+        if (m_layout) {
+            searchPage->setLayout(m_layout);
+            searchPage->updateLayout();
+        }
+        searchPage->setVisible(false);
     }
-    searchPage->setVisible(false);
     return searchPage;
 }
 
 void PageMenu::addPagedChild(CCNode* child) {
+
+    if(!m_isPage) return;
 
     bool childWasAdded = false;
     if (m_maxCount == 0) return;
@@ -206,6 +274,9 @@ void PageMenu::addPagedChild(CCNode* child) {
 }
 
 void PageMenu::setPageLayout(Layout* layout) {
+
+    if(!m_isPage) return;
+
     m_layout = layout;
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
         page->setLayout(layout);
@@ -214,6 +285,8 @@ void PageMenu::setPageLayout(Layout* layout) {
 }
 
 void PageMenu::setOrientation(PageOrientation orientation) {
+
+    if(!m_isPage) return;
 
     if(m_originalMenu->getUserObject("orientation")){
         orientation = (PageOrientation)typeinfo_cast<CCInteger*>(m_originalMenu->getUserObject("orientation"))->getValue();
@@ -233,6 +306,8 @@ void PageMenu::setOrientation(PageOrientation orientation) {
 }
 
 void PageMenu::setNavGap(float gapSize) {
+
+    if(!m_isPage) return;
 
     if(m_originalMenu->getUserObject("gap")){
         gapSize = typeinfo_cast<CCFloat*>(m_originalMenu->getUserObject("gap"))->getValue();
@@ -262,6 +337,27 @@ void PageMenu::setNavGap(float gapSize) {
     m_prevButton->setPosition({xPosPrev, yPosPrev});
 }
 
+void PageMenu::setUniformScale(bool isUniform){
+
+    if(!m_isPage) return;
+    
+    m_isUniformScale = isUniform;
+
+    if(!m_children) return;
+    if(m_children->count() == 0) return;
+
+    if(isUniform){
+        if(CCObject* obj = m_children->objectAtIndex(0)){
+            if(CCNode* child = typeinfo_cast<CCNode*>(obj)) {
+                float scale = child->getScale();
+                for (CCNode* node : CCArrayExt<CCNode*>(m_children)) {
+                    node->setScale(scale);
+                }
+            }
+        }
+    }
+}
+
 void PageMenu::goLeft(CCObject* obj) {
 		
     m_page--;
@@ -285,6 +381,9 @@ void PageMenu::goRight(CCObject* obj) {
 }
 
 void PageMenu::setPageVisible() {
+
+    if(!m_isPage) return;
+
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
         page->setVisible(false);
     }
@@ -295,7 +394,18 @@ void PageMenu::setPageVisible() {
 }
 
 void PageMenu::scaleWhenFull() {
-    if (m_pages->count() > 1) {
+    
+    if(!m_isPage) return;
+
+    bool doShrink = true;
+
+    if(CCObject* obj = m_originalMenu->getUserObject("shrink-when-full")){
+        if (CCBool* shrink = typeinfo_cast<CCBool*>(obj)){
+            doShrink = shrink->getValue();
+        }
+    }
+
+    if (doShrink && m_pages->count() > 1) {
         setScale(0.85f);
     }
 }

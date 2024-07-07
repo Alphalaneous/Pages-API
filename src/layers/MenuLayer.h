@@ -24,6 +24,7 @@ class $modify(PageMenuLayer, MenuLayer) {
 
 			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), 6);
 			menuPage->scaleWhenFull();
+            menuPage->setUniformScale(true);
 
 			addChild(menuPage);
 		}

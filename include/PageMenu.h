@@ -26,13 +26,17 @@ private:
     int m_maxCount = 0;
     float m_navGap = 15;
     bool m_isEditing = false;
+    bool m_isPage = true;
+    bool m_forceContentSize = false;
+    bool m_isUniformScale = false;
     CCMenu* m_originalMenu;
+    CCMenu* m_navMenu;
     CCArray* m_children;
     PageOrientation m_pageOrientation = PageOrientation::HORIZONTAL;
     CCMenuItem* m_doneButton;
     CCScale9Sprite* m_buttonBG;
     CCLabelBMFont* m_doneLabel;
-
+    bool m_finishedInit = false;
 public:
 
     Layout* m_layout;
@@ -62,7 +66,8 @@ public:
     void stopShakeChildren();
     void startEditing();
     void stopEditing(CCObject* obj);
-
+    void setUniformScale(bool isUniform);
+    void updatePage();
     CCMenu* createPage();
 };
 

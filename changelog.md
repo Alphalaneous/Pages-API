@@ -1,4 +1,18 @@
 # Pages API Changelog
+## 1.0.16
+* FINALLY FIX BUGS! (PT. 4, the end of the bug!)
+## 1.0.15
+* Fix even more bugs (PT. 3)
+## 1.0.14
+* Fix more bugs (PT. 2)
+## 1.0.13
+* Fixed bugs (PT. 1)
+## 1.0.12
+* Add support for the LevelInfoLayer page
+## 1.0.11
+* Fix bug that would crash Geometry Dash
+## 1.0.10
+* Add ability to disable pages
 ## 1.0.9
 * Add editing of PageMenus
 ## 1.0.8

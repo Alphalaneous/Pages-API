@@ -147,7 +147,7 @@ void PageMenu::updatePage() {
     m_innerNode->removeAllChildrenWithCleanup(false);
     m_pages->removeAllObjects();
 
-    if(m_children->count() == 0) return;
+    if(!m_children || m_children->count() == 0) return;
 
     CCSize contentSize = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))->getContentSize();
     int pageCount = std::ceil(m_children->count()/(float)m_maxCount);
@@ -164,21 +164,22 @@ void PageMenu::updatePage() {
                 break;
             }
 
-            CCNode* child = typeinfo_cast<CCNode*>(m_children->objectAtIndex(pos));
-            child->setUserObject("page-menu", this);
+            if(CCNode* child = typeinfo_cast<CCNode*>(m_children->objectAtIndex(pos))) {
+                child->setUserObject("page-menu", this);
 
-            childrenCount--;
-            if (!child->isVisible()) elementCount++;
+                childrenCount--;
+                if (!child->isVisible()) elementCount++;
 
-            if (m_forceContentSize) {
-                child->setContentSize(contentSize);
-                if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
-                    spr->setAnchorPoint({1, 0});
-                    spr->setPosition({contentSize.width, 0});
+                if (m_forceContentSize) {
+                    child->setContentSize(contentSize);
+                    if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
+                        spr->setAnchorPoint({1, 0});
+                        spr->setPosition({contentSize.width, 0});
+                    }
                 }
+                pos++;
+                searchPage->addChild(child);
             }
-            pos++;
-            searchPage->addChild(child);
         }
         if (searchPage->getChildrenCount() > 0) {
             searchPage->updateLayout();

@@ -14,6 +14,10 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
 
 	LATE_MODIFY(LevelInfoLayer::init);
 
+	struct Fields {
+		PageMenu* m_leftSidePage;
+	};
+
 	bool init(GJGameLevel* level, bool challenge){
 		if (!LevelInfoLayer::init(level, challenge)) {
 			return false;
@@ -22,14 +26,19 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
 		if(Mod::get()->getSettingValue<bool>("levelinfolayer-left-menu")){
 			auto leftSideMenu = getChildByID("left-side-menu");
 			leftSideMenu->setContentSize({40, 120});
-			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(leftSideMenu), 3, false);
-            menuPage->setOrientation(PageOrientation::VERTICAL);
-            menuPage->setUniformScale();
-			menuPage->setPosition({menuPage->getPosition().x, menuPage->getPosition().y + 20});
-			addChild(menuPage);
+			m_fields->m_leftSidePage = PageMenu::create(typeinfo_cast<CCMenu*>(leftSideMenu), 3, false);
+            m_fields->m_leftSidePage->setOrientation(PageOrientation::VERTICAL);
+            m_fields->m_leftSidePage->setUniformScale(true);
+			m_fields->m_leftSidePage->setPosition({m_fields->m_leftSidePage->getPosition().x, m_fields->m_leftSidePage->getPosition().y + 20});
+			addChild(m_fields->m_leftSidePage);
 		}
 
 		return true;
+	}
+
+	void levelDownloadFinished(GJGameLevel* p0){
+		LevelInfoLayer::levelDownloadFinished(p0);
+		m_fields->m_leftSidePage->updatePage();
 	}
 };
 

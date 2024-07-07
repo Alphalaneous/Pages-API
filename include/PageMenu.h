@@ -27,7 +27,10 @@ private:
     float m_navGap = 15;
     bool m_isEditing = false;
     bool m_isPage = true;
+    bool m_forceContentSize = false;
+    bool m_isUniformScale = false;
     CCMenu* m_originalMenu;
+    CCMenu* m_navMenu;
     CCArray* m_children;
     PageOrientation m_pageOrientation = PageOrientation::HORIZONTAL;
     CCMenuItem* m_doneButton;
@@ -63,7 +66,8 @@ public:
     void stopShakeChildren();
     void startEditing();
     void stopEditing(CCObject* obj);
-    void setUniformScale();
+    void setUniformScale(bool isUniform);
+    void updatePage();
     CCMenu* createPage();
 };
 

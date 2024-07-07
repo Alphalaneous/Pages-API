@@ -36,7 +36,7 @@ private:
     CCMenuItem* m_doneButton;
     CCScale9Sprite* m_buttonBG;
     CCLabelBMFont* m_doneLabel;
-
+    bool m_finishedInit = false;
 public:
 
     Layout* m_layout;

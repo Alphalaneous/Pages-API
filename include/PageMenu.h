@@ -63,7 +63,7 @@ public:
     void stopShakeChildren();
     void startEditing();
     void stopEditing(CCObject* obj);
-
+    void setUniformScale();
     CCMenu* createPage();
 };
 

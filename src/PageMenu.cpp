@@ -281,6 +281,21 @@ void PageMenu::setNavGap(float gapSize) {
     m_prevButton->setPosition({xPosPrev, yPosPrev});
 }
 
+void PageMenu::setUniformScale(){
+
+    if(!m_isPage) return;
+    
+    if(m_children && m_children->count() > 0){
+        if(CCNode* child = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))) {
+            float scale = child->getScale();
+        
+            for (CCNode* node : CCArrayExt<CCNode*>(m_children)) {
+                node->setScale(scale);
+            }
+        }
+    }
+}
+
 void PageMenu::goLeft(CCObject* obj) {
 		
     m_page--;

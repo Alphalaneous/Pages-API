@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #ifndef PAGE_LEVELINFOLAYER_H
 #define PAGE_LEVELINFOLAYER_H
@@ -44,4 +44,4 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
 	}
 };
 
-#endif
+#endif*/

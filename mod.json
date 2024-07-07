@@ -10,6 +10,15 @@
 	"name": "Pages API",
 	"developer": "Alphalaneous",
 	"description": "An API to automatically add pages to Quick Search and CreatorLayer",
+  "repository": "https://github.com/Alphalaneous/Pages-API",
+  "links": {
+    "community": "https://discord.com/invite/Txn2CA5dHF",
+    "source": "https://github.com/Alphalaneous/Pages-API"
+  },
+  "issues" : {
+    "info": "GitHub Issues",
+    "url": "https://github.com/Alphalaneous/Pages-API/issues"
+  },
 	"dependencies": [
         {
             "id": "geode.node-ids",

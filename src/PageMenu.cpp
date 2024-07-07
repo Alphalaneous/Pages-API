@@ -152,10 +152,21 @@ void PageMenu::updatePage() {
     if(!m_children) return;
     if(m_children->count() == 0) return;
 
-    m_innerNode->removeAllChildrenWithCleanup(false);
-    m_pages->removeAllObjects();
+    if(m_innerNode->getChildrenCount() > 0){
+        m_innerNode->removeAllChildrenWithCleanup(false);
+    }
+    if(m_pages->count() > 0){
+        m_pages->removeAllObjects();
+    }
 
-    CCSize contentSize = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))->getContentSize();
+    CCSize contentSize = {0, 0};
+
+    if(CCObject* obj = m_children->objectAtIndex(0)){
+        if(CCNode* node = typeinfo_cast<CCNode*>(obj)){
+            contentSize = node->getContentSize();
+        }
+    }
+
     int pageCount = std::ceil(m_children->count()/(float)m_maxCount);
     int elementCount = m_maxCount;
     int childrenCount = m_children->count();
@@ -196,7 +207,9 @@ void PageMenu::updatePage() {
     }
 
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
-        m_innerNode->addChild(page);
+        if(page){
+            m_innerNode->addChild(page);
+        }
     }
 
     if (m_pages->count() > 0) {
@@ -212,22 +225,25 @@ void PageMenu::updatePage() {
             }
         }
     }
-
-    m_navMenu->setVisible(m_pages->count() > 1);
+    if(m_navMenu){
+        m_navMenu->setVisible(m_pages->count() > 1);
+    }
     setUniformScale(m_isUniformScale);
 }
 
 CCMenu* PageMenu::createPage() {
     CCMenu* searchPage = CCMenu::create();
-    CCSize menuSize = m_originalMenu->getContentSize();
-    searchPage->setPosition({menuSize.width/2, menuSize.height/2});
-    searchPage->setScale(m_originalMenu->getScale());
-    searchPage->setContentSize(m_originalMenu->getContentSize());
-    if (m_layout) {
-        searchPage->setLayout(m_layout);
-        searchPage->updateLayout();
+    if(m_originalMenu){
+        CCSize menuSize = m_originalMenu->getContentSize();
+        searchPage->setPosition({menuSize.width/2, menuSize.height/2});
+        searchPage->setScale(m_originalMenu->getScale());
+        searchPage->setContentSize(m_originalMenu->getContentSize());
+        if (m_layout) {
+            searchPage->setLayout(m_layout);
+            searchPage->updateLayout();
+        }
+        searchPage->setVisible(false);
     }
-    searchPage->setVisible(false);
     return searchPage;
 }
 

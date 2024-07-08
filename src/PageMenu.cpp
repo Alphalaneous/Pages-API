@@ -324,7 +324,7 @@ CCMenu* PageMenu::createPage() {
         searchPage->setPosition({menuSize.width/2, menuSize.height/2});
         searchPage->setScale(m_originalMenu->getScale());
         searchPage->setContentSize(m_originalMenu->getContentSize());
-        if (m_layout) {
+        if (typeinfo_cast<Layout*>(m_layout)) {
             searchPage->setLayout(m_layout);
             searchPage->updateLayout();
         }

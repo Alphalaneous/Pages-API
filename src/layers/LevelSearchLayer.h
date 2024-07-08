@@ -32,8 +32,7 @@ class $modify(PageLevelSearchLayer, LevelSearchLayer) {
             quickSearchMenu->ignoreAnchorPointForPosition(false);
             quickSearchMenu->setPosition({quickSearchMenu->getPosition().x, quickSearchMenu->getPosition().y + 28});
 
-            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), 9, layout);
-            menuPage->setPageLayout(layout);
+            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(quickSearchMenu), layout, 9);
 
             addChild(menuPage);
         }

@@ -33,9 +33,8 @@ class $modify(PagePauseLayer, PauseLayer) {
             layout->setGap(10);
             layout->ignoreInvisibleChildren(true);
 
-            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(centerMenu), 6);
+            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(centerMenu), layout, 6);
             menuPage->scaleWhenFull();
-            menuPage->setPageLayout(layout);
             addChild(menuPage);
         }
     }

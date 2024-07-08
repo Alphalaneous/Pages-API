@@ -2,17 +2,12 @@
 #include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
-    if(m_isPage){
-        m_pages->release();
-        m_children->release();
-        m_originalMenu->release();
-        m_lastAttributes->release();
-    }
+    
 }
 
-PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize) {
+PageMenu* PageMenu::create(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {
     auto node = new PageMenu();
-    if (!node->init(menu, elementCount, forceContentSize)) {
+    if (!node->init(menu, layout, elementCount, forceContentSize)) {
         CC_SAFE_DELETE(node);
         return nullptr;
     }
@@ -20,7 +15,7 @@ PageMenu* PageMenu::create(CCMenu* menu, int elementCount, bool forceContentSize
     return node;
 }
 
-bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
+bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {
 
     if(CCObject* obj = menu->getUserObject("disable-pages")){
         if (CCBool* disable = typeinfo_cast<CCBool*>(obj)){
@@ -32,16 +27,13 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     }
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
-    m_children->retain();
 
     m_lastAttributes = CCDictionary::create();
-    m_lastAttributes->retain();
 
     CCSize winSize = CCDirector::get()->getWinSize();
 
     m_maxCount = elementCount;
     m_originalMenu = menu;
-    m_originalMenu->retain();
 
     m_innerNode = CCNode::create();
     m_innerNode->setContentSize(menu->getScaledContentSize());
@@ -91,9 +83,12 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     setContentSize(menu->getContentSize());
     setPosition(menu->getPosition());
     setID(fmt::format("paged-{}", menu->getID()));
-    m_layout = menu->getLayout();
-    if (m_layout) {
+    if(layout){
+        m_layout = layout;
         m_layout->ignoreInvisibleChildren(true);
+    }
+    else {
+        return false;
     }
 
     int idx = 0;
@@ -101,7 +96,6 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     int pageCount = std::ceil(m_children->count()/(float)elementCount);
 
     m_pages = CCArray::create();
-    m_pages->retain();
 
     float btnScale = 0.6f;
 
@@ -324,7 +318,7 @@ CCMenu* PageMenu::createPage() {
         searchPage->setPosition({menuSize.width/2, menuSize.height/2});
         searchPage->setScale(m_originalMenu->getScale());
         searchPage->setContentSize(m_originalMenu->getContentSize());
-        if (typeinfo_cast<Layout*>(m_layout)) {
+        if (m_layout) {
             searchPage->setLayout(m_layout);
             searchPage->updateLayout();
         }

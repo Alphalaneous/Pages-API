@@ -22,7 +22,7 @@ class $modify(PageMenuLayer, MenuLayer) {
         if(Mod::get()->getSettingValue<bool>("menulayer-bottom-menu")){
             auto bottomMenu = getChildByID("bottom-menu");
 
-            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), 6);
+            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(bottomMenu), bottomMenu->getLayout(), 6);
             menuPage->scaleWhenFull();
             menuPage->setUniformScale(true);
             addChild(menuPage);
@@ -31,7 +31,7 @@ class $modify(PageMenuLayer, MenuLayer) {
         if(Mod::get()->getSettingValue<bool>("menulayer-right-menu")){
             auto rightMenu = getChildByID("right-side-menu");
 
-            PageMenu* menuPageR = PageMenu::create(typeinfo_cast<CCMenu*>(rightMenu), 3);
+            PageMenu* menuPageR = PageMenu::create(typeinfo_cast<CCMenu*>(rightMenu), rightMenu->getLayout(), 3);
             menuPageR->setNavGap(2);
             menuPageR->setOrientation(PageOrientation::VERTICAL);
             menuPageR->scaleWhenFull();

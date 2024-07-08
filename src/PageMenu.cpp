@@ -5,6 +5,7 @@ PageMenu::~PageMenu() {
     if(m_isPage){
         m_pages->release();
         m_children->release();
+        m_originalMenu->release();
     }
 }
 
@@ -36,6 +37,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
     m_maxCount = elementCount;
     m_originalMenu = menu;
+    m_originalMenu->retain();
+
     m_innerNode = CCNode::create();
     m_innerNode->setContentSize(menu->getScaledContentSize());
     //m_innerNode->setPosition(menu->getPosition());
@@ -139,7 +142,7 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 
 void PageMenu::checkMenu(float dt){
 
-    if(!m_isPage || !m_finishedInit || !m_children) return;
+    if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
 
     if(m_originalMenu->getChildrenCount() > 0){
         updatePage();
@@ -165,7 +168,7 @@ void PageMenu::checkInnerPages(float dt){
 
 void PageMenu::updatePage() {
 
-    if(!m_isPage || !m_finishedInit || !m_children) return;
+    if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
 
     for(CCNode* node : CCArrayExt<CCNode*>(m_originalMenu->getChildren())){
         m_children->addObject(node);

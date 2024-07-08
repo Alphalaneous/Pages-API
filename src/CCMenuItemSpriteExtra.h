@@ -59,7 +59,7 @@ class $modify(PageCCMenuItemSpriteExtra, CCMenuItemSpriteExtra) {
     }
 
     void showMenuEditor(float dt) {
-        if(PageMenu* menu = typeinfo_cast<PageMenu*>(getUserObject("page-menu"))){
+        if(PageMenu* menu = typeinfo_cast<PageMenu*>(getParent()->getParent())){
             menu->startEditing();
         }
     }

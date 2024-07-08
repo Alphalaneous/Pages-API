@@ -2,7 +2,7 @@
 #include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
-    
+    log::info("dtor!!");
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {
@@ -17,6 +17,7 @@ PageMenu* PageMenu::create(CCMenu* menu, Layout* layout, int elementCount, bool 
 
 bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {
 
+    CCMenu::init();
     if(CCObject* obj = menu->getUserObject("disable-pages")){
         if (CCBool* disable = typeinfo_cast<CCBool*>(obj)){
             if(disable->getValue()) {
@@ -263,7 +264,7 @@ void PageMenu::updatePage() {
             }
 
             if(CCNode* child =  typeinfo_cast<CCNode*>(m_children->objectAtIndex(pos))){
-                child->setUserObject("page-menu", this);
+                child->setUserObject("page-menu", CCBool::create(true));
                 childrenCount--;
                 if (!child->isVisible()) elementCount++;
 
@@ -333,7 +334,7 @@ void PageMenu::addPagedChild(CCNode* child) {
 
     bool childWasAdded = false;
     if (m_maxCount == 0) return;
-    child->setUserObject("page-menu", this);
+    child->setUserObject("page-menu", CCBool::create(true));
     m_children->addObject(child);
 
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {

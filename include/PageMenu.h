@@ -17,7 +17,7 @@
 
 using namespace geode::prelude;
 
-enum PAGES_API_DLL PageOrientation{ VERTICAL, HORIZONTAL };
+enum PageOrientation{ VERTICAL, HORIZONTAL };
 
 class PAGES_API_DLL PageMenu : public CCMenu {
 

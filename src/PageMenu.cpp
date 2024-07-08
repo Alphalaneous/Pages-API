@@ -133,8 +133,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     addChild(m_innerNode);
 
     menu->setVisible(false);
-    menu->schedule(schedule_selector(PageMenu::checkMenu));
-
+    
+    schedule(schedule_selector(PageMenu::checkMenu));
     schedule(schedule_selector(PageMenu::checkInnerPages));
 
     return true;

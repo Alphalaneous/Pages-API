@@ -9,4 +9,7 @@ if(CCFloat* obj = typeinfo_cast<CCFloat*>(m_lastAttributes->objectForKey(#attrib
         set##attribute(m_originalMenu->get##attribute());\
     }\
 }\
+else {\
+    set##attribute(m_originalMenu->get##attribute());\
+}\
 m_lastAttributes->setObject(CCFloat::create(m_originalMenu->get##attribute()), #attribute);

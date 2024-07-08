@@ -65,6 +65,9 @@ class $modify(PageCCMenuItemSpriteExtra, CCMenuItemSpriteExtra) {
     }
 
     void startShakeAnimation(){
+        
+        #ifdef IN_PROGRESS
+
         m_fields->m_runActivation = false;
         
         float rotationDegrees = 10.0f;
@@ -80,12 +83,19 @@ class $modify(PageCCMenuItemSpriteExtra, CCMenuItemSpriteExtra) {
         repeat->setTag(69);
 
         runAction(repeat);
+
+        #endif
     }
 
     void stopShakeAnimation() {
+
+        #ifdef IN_PROGRESS
+
         m_fields->m_runActivation = true;
         stopActionByTag(69);
         setRotation(m_fields->m_origRotation);
+
+        #endif
     }
 };
 

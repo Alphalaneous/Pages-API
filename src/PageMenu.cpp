@@ -136,6 +136,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     addChild(m_navMenu);
     addChild(m_innerNode);
 
+    setUserObject("real-scale", CCFloat::create(1));
+
     schedule(schedule_selector(PageMenu::checkMenu));
     schedule(schedule_selector(PageMenu::checkAttributes));
 
@@ -143,6 +145,8 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
 }
 
 void PageMenu::checkAttributes(float dt){
+
+    float lastScale = getScale();
 
     attributeListen(PositionX);
     attributeListen(PositionY);
@@ -155,6 +159,11 @@ void PageMenu::checkAttributes(float dt){
     attributeListen(ZOrder);
     attributeListen(ContentWidth);
     attributeListen(ContentHeight);
+
+    if(lastScale != getScale() && m_scaleWhenFull){
+        setUserObject("real-scale", CCFloat::create(m_originalMenu->getScale()));
+        scaleWhenFull();
+    }
 
     if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("Visible"))){
         if(obj->getValue() != m_originalMenu->isVisible()){
@@ -207,19 +216,21 @@ void PageMenu::checkMenu(float dt){
         return;
     }
 
-    for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){
-        int visibleCount = 0;
+    int visibleCount = 0;
 
-        if(page->getChildrenCount() <= m_maxCount) return;
-
-        for(CCNode* child : CCArrayExt<CCNode*>(page->getChildren())){
-            if(child->isVisible()) visibleCount++;
-            if(visibleCount > m_maxCount){
-                updatePage();
-                return;
-            }
+    for(CCNode* child : CCArrayExt<CCNode*>(m_children)){
+        if(child->isVisible()) visibleCount++;
+        if(visibleCount > m_lastVisibleCount){
+            updatePage();
+            break;
         }
     }
+
+    if(visibleCount < m_lastVisibleCount){
+        updatePage();
+    }
+
+    m_lastVisibleCount = visibleCount;
 }
 
 void PageMenu::updatePage() {
@@ -300,6 +311,10 @@ void PageMenu::updatePage() {
         m_navMenu->setVisible(m_pages->count() > 1);
     }
     setUniformScale(m_isUniformScale);
+
+    if(m_scaleWhenFull){
+        scaleWhenFull();
+    }
 }
 
 CCMenu* PageMenu::createPage() {
@@ -486,6 +501,8 @@ void PageMenu::scaleWhenFull() {
     
     if(!m_isPage) return;
 
+    m_scaleWhenFull = true;
+
     bool doShrink = true;
 
     if(CCObject* obj = m_originalMenu->getUserObject("shrink-when-full")){
@@ -495,7 +512,7 @@ void PageMenu::scaleWhenFull() {
     }
 
     if (doShrink && m_pages->count() > 1) {
-        setScale(0.85f);
+        setScale(typeinfo_cast<CCFloat*>(getUserObject("real-scale"))->getValue() * 0.85f);
     }
 }
 

@@ -27,6 +27,7 @@ protected:
 private:
     int m_page = 0;
     int m_maxCount = 0;
+    int m_lastVisibleCount;
     float m_navGap = 15;
     bool m_isEditing = false;
     bool m_isPage = true;
@@ -41,6 +42,7 @@ private:
     CCLabelBMFont* m_doneLabel;
     bool m_finishedInit = false;
     bool m_forceScale = false;
+    bool m_scaleWhenFull = false;
     float m_forcedScale = 0;
     CCDictionary* m_lastAttributes;
 public:

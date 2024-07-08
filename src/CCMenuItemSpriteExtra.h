@@ -12,7 +12,7 @@ using namespace geode::prelude;
 
 class $modify(PageCCMenuItemSpriteExtra, CCMenuItemSpriteExtra) {
 
-	LATE_MODIFY(CCMenuItemSpriteExtra::init);
+    LATE_MODIFY(CCMenuItemSpriteExtra::init);
 
     struct Fields {
         SEL_SCHEDULE m_holdSchedule;

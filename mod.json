@@ -1,63 +1,63 @@
 {
-	"geode": "3.2.0",
-	"gd": {
-		"win": "2.206",
-		"android": "2.206",
-		"mac": "2.206"
-	},
-	"version": "v1.0.16",
-	"id": "alphalaneous.pages_api",
-	"name": "Pages API",
-	"developer": "Alphalaneous",
-	"description": "An API to automatically add pages to Quick Search and CreatorLayer",
-	"dependencies": [
+    "geode": "3.2.0",
+    "gd": {
+        "win": "2.206",
+        "android": "2.206",
+        "mac": "2.206"
+    },
+    "version": "v1.1.0",
+    "id": "alphalaneous.pages_api",
+    "name": "Pages API",
+    "developer": "Alphalaneous",
+    "description": "An API to automatically add pages to Quick Search and CreatorLayer",
+    "dependencies": [
         {
             "id": "geode.node-ids",
             "version": ">=v1.12.0-alpha.2",
             "importance": "required"
         }
     ],
-	"api": {
-		"include": [
-			"include/*.h"
-		]
-	},
-	"settings": {
-		"menulayer-right-menu": {
-			"name": "MenuLayer Right Menu",
-			"description": "Enable pages on the right menu of the MenuLayer",
-			"type": "bool",
-			"default": true
-		},
-		"menulayer-bottom-menu": {
-			"name": "MenuLayer Bottom Menu",
-			"description": "Enable pages on the bottom menu of the MenuLayer",
-			"type": "bool",
-			"default": true
-		},
-		"creator-layer-menu": {
-			"name": "CreatorLayer Menu",
-			"description": "Enable pages on the CreatorLayer menu",
-			"type": "bool",
-			"default": true
-		},
-		"level-search-layer-quick-search-menu": {
-			"name": "LevelSearchLayer Quick Search Menu",
-			"description": "Enable pages on the LevelSearchLayer Quick Search menu",
-			"type": "bool",
-			"default": true
-		},
-		"pause-layer-menu": {
-			"name": "PauseLayer Menu",
-			"description": "Enable pages on the PauseLayer menu",
-			"type": "bool",
-			"default": true
-		},
-		"levelinfolayer-left-menu": {
-			"name": "LevelInfoLayer Left Menu",
-			"description": "Enable pages on the LevelInfoLayer left menu",
-			"type": "bool",
-			"default": true
-		}
-	}
+    "api": {
+        "include": [
+            "include/*.h"
+        ]
+    },
+    "settings": {
+        "menulayer-right-menu": {
+            "name": "MenuLayer Right Menu",
+            "description": "Enable pages on the right menu of the MenuLayer",
+            "type": "bool",
+            "default": true
+        },
+        "menulayer-bottom-menu": {
+            "name": "MenuLayer Bottom Menu",
+            "description": "Enable pages on the bottom menu of the MenuLayer",
+            "type": "bool",
+            "default": true
+        },
+        "creator-layer-menu": {
+            "name": "CreatorLayer Menu",
+            "description": "Enable pages on the CreatorLayer menu",
+            "type": "bool",
+            "default": true
+        },
+        "level-search-layer-quick-search-menu": {
+            "name": "LevelSearchLayer Quick Search Menu",
+            "description": "Enable pages on the LevelSearchLayer Quick Search menu",
+            "type": "bool",
+            "default": true
+        },
+        "pause-layer-menu": {
+            "name": "PauseLayer Menu",
+            "description": "Enable pages on the PauseLayer menu",
+            "type": "bool",
+            "default": true
+        },
+        "levelinfolayer-left-menu": {
+            "name": "LevelInfoLayer Left Menu",
+            "description": "Enable pages on the LevelInfoLayer left menu",
+            "type": "bool",
+            "default": true
+        }
+    }
 }

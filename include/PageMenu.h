@@ -12,7 +12,7 @@
         #define PAGES_API_DLL __declspec(dllimport)
     #endif
     #else
-        #define PAGES_API_DLL
+        #define PAGES_API_DLL __attribute__((visibility("default")))
 #endif
 
 using namespace geode::prelude;
@@ -20,6 +20,10 @@ using namespace geode::prelude;
 enum PAGES_API_DLL PageOrientation{ VERTICAL, HORIZONTAL };
 
 class PAGES_API_DLL PageMenu : public CCMenu {
+
+protected:
+    void checkMenu(float dt);
+    void checkInnerPages(float dt);
 
 private:
     int m_page = 0;
@@ -37,6 +41,8 @@ private:
     CCScale9Sprite* m_buttonBG;
     CCLabelBMFont* m_doneLabel;
     bool m_finishedInit = false;
+    bool m_forceScale = false;
+    float m_forcedScale = 0;
 public:
 
     Layout* m_layout;
@@ -68,6 +74,7 @@ public:
     void stopEditing(CCObject* obj);
     void setUniformScale(bool isUniform);
     void updatePage();
+    void setForceScale(bool force, float scale);
     CCMenu* createPage();
 };
 

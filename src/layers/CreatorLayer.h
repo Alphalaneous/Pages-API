@@ -12,22 +12,22 @@ using namespace geode::prelude;
 
 class $modify(PageCreatorLayer, CreatorLayer) {
 
-	LATE_MODIFY(CreatorLayer::init);
+    LATE_MODIFY(CreatorLayer::init);
 
-	bool init(){
-		if (!CreatorLayer::init()) {
-			return false;
-		}
+    bool init(){
+        if (!CreatorLayer::init()) {
+            return false;
+        }
 
-		if(Mod::get()->getSettingValue<bool>("creator-layer-menu")){
-			auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
-			creatorButtonsMenu->setContentSize({450, 270});
-			PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
-			addChild(menuPage);
-		}
+        if(Mod::get()->getSettingValue<bool>("creator-layer-menu")){
+            auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
+            creatorButtonsMenu->setContentSize({450, 270});
+            PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), 15, true);
+            addChild(menuPage);
+        }
 
-		return true;
-	}
+        return true;
+    }
 };
 
 #endif

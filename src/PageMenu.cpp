@@ -30,9 +30,6 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     }
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
-    for(CCNode* node : CCArrayExt<CCNode*>(menu->getChildren())){
-        m_children->addObject(node);
-    }
     m_children->retain();
 
     CCSize winSize = CCDirector::get()->getWinSize();
@@ -86,13 +83,11 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     ignoreAnchorPointForPosition(false);
     setContentSize(menu->getContentSize());
     setPosition(menu->getPosition());
-    setID(menu->getID());
+    setID(fmt::format("paged-{}", menu->getID()));
     m_layout = menu->getLayout();
     if (m_layout) {
-	    m_layout->ignoreInvisibleChildren(true);
+        m_layout->ignoreInvisibleChildren(true);
     }
-
-    CCSize contentSize = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))->getContentSize();
 
     int idx = 0;
 
@@ -119,9 +114,6 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_navMenu->ignoreAnchorPointForPosition(true);
     m_navMenu->addChild(m_nextButton);
     m_navMenu->addChild(m_prevButton);
-
-    menu->removeAllChildrenWithCleanup(false);
-
     m_finishedInit = true;
 
     updatePage();
@@ -133,38 +125,63 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_navMenu->addChild(m_doneButton);
 
     #endif
-    
-    menu->removeFromParentAndCleanup(false);
 
     addChild(m_navMenu);
     addChild(m_innerNode);
 
+    menu->setVisible(false);
+    menu->schedule(schedule_selector(PageMenu::checkMenu));
+
+    schedule(schedule_selector(PageMenu::checkInnerPages));
+
     return true;
+}
+
+void PageMenu::checkMenu(float dt){
+
+    if(!m_isPage || !m_finishedInit || !m_children) return;
+
+    if(m_originalMenu->getChildrenCount() > 0){
+        updatePage();
+    }
+}
+
+void PageMenu::checkInnerPages(float dt){
+
+    for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){
+        int visibleCount = 0;
+
+        if(page->getChildrenCount() <= m_maxCount) return;
+
+        for(CCNode* child : CCArrayExt<CCNode*>(page->getChildren())){
+            if(child->isVisible()) visibleCount++;
+            if(visibleCount > m_maxCount){
+                updatePage();
+                return;
+            }
+        }
+    }
 }
 
 void PageMenu::updatePage() {
 
-    if(!m_isPage) return;
-    if(!m_finishedInit) return;
-    if(!m_innerNode) return;
-    if(!m_pages) return;
-    if(!m_navMenu) return;
-    if(!m_children) return;
+    if(!m_isPage || !m_finishedInit || !m_children) return;
+
+    for(CCNode* node : CCArrayExt<CCNode*>(m_originalMenu->getChildren())){
+        m_children->addObject(node);
+    }
+
+    m_originalMenu->removeAllChildrenWithCleanup(false);
+
     if(m_children->count() == 0) return;
 
-    if(m_innerNode->getChildrenCount() > 0){
-        m_innerNode->removeAllChildrenWithCleanup(false);
-    }
-    if(m_pages->count() > 0){
-        m_pages->removeAllObjects();
-    }
-
+    m_innerNode->removeAllChildrenWithCleanup(false);
+    m_pages->removeAllObjects();
+    
     CCSize contentSize = {0, 0};
 
-    if(CCObject* obj = m_children->objectAtIndex(0)){
-        if(CCNode* node = typeinfo_cast<CCNode*>(obj)){
-            contentSize = node->getContentSize();
-        }
+    if(CCNode* node = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))){
+        contentSize = node->getContentSize();
     }
 
     int pageCount = std::ceil(m_children->count()/(float)m_maxCount);
@@ -181,23 +198,20 @@ void PageMenu::updatePage() {
                 break;
             }
 
-            if(CCObject* obj = m_children->objectAtIndex(pos)){
-                if(CCNode* child = typeinfo_cast<CCNode*>(obj)) {
-                    child->setUserObject("page-menu", this);
+            if(CCNode* child =  typeinfo_cast<CCNode*>(m_children->objectAtIndex(pos))){
+                child->setUserObject("page-menu", this);
+                childrenCount--;
+                if (!child->isVisible()) elementCount++;
 
-                    childrenCount--;
-                    if (!child->isVisible()) elementCount++;
-
-                    if (m_forceContentSize) {
-                        child->setContentSize(contentSize);
-                        if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
-                            spr->setAnchorPoint({1, 0});
-                            spr->setPosition({contentSize.width, 0});
-                        }
+                if (m_forceContentSize) {
+                    child->setContentSize(contentSize);
+                    if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
+                        spr->setAnchorPoint({1, 0});
+                        spr->setPosition({contentSize.width, 0});
                     }
-                    pos++;
-                    searchPage->addChild(child);
                 }
+                pos++;
+                searchPage->addChild(child);
             }
         }
         if (searchPage->getChildrenCount() > 0) {
@@ -219,10 +233,8 @@ void PageMenu::updatePage() {
             page = m_page;
         }
 
-        if(CCObject* obj = m_pages->objectAtIndex(m_page)){
-            if(CCNode* node = typeinfo_cast<CCNode*>(obj)) {
-                node->setVisible(true);
-            }
+        if(CCNode* node = typeinfo_cast<CCNode*>(m_pages->objectAtIndex(m_page))){
+            node->setVisible(true);
         }
     }
     if(m_navMenu){
@@ -347,10 +359,22 @@ void PageMenu::setUniformScale(bool isUniform){
     if(m_children->count() == 0) return;
 
     if(isUniform){
-        if(CCObject* obj = m_children->objectAtIndex(0)){
-            if(CCNode* child = typeinfo_cast<CCNode*>(obj)) {
+
+        if(m_forceScale){
+            for (CCNode* node : CCArrayExt<CCNode*>(m_children)) {
+                if(CCMenuItemSpriteExtra* button = typeinfo_cast<CCMenuItemSpriteExtra*>(node)){
+                    button->m_baseScale = m_forcedScale;
+                }
+                node->setScale(m_forcedScale);
+            }
+        }
+        else{
+            if(CCNode* child = typeinfo_cast<CCNode*>(m_children->objectAtIndex(0))){
                 float scale = child->getScale();
                 for (CCNode* node : CCArrayExt<CCNode*>(m_children)) {
+                    if(CCMenuItemSpriteExtra* button = typeinfo_cast<CCMenuItemSpriteExtra*>(node)){
+                        button->m_baseScale = scale;
+                    }
                     node->setScale(scale);
                 }
             }
@@ -358,8 +382,14 @@ void PageMenu::setUniformScale(bool isUniform){
     }
 }
 
+void PageMenu::setForceScale(bool force, float scale){
+    m_forceScale = force;
+    m_forcedScale = scale;
+    setUniformScale(m_isUniformScale);
+}
+
 void PageMenu::goLeft(CCObject* obj) {
-		
+        
     m_page--;
 
     if (m_page < 0) {
@@ -370,7 +400,7 @@ void PageMenu::goLeft(CCObject* obj) {
 }
 
 void PageMenu::goRight(CCObject* obj) {
-		
+        
     m_page++;
     m_prevButton->setVisible(true);
 

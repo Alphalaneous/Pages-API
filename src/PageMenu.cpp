@@ -133,12 +133,13 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     addChild(m_innerNode);
 
     menu->setVisible(false);
-    
+
     schedule(schedule_selector(PageMenu::checkMenu));
-    schedule(schedule_selector(PageMenu::checkInnerPages));
 
     return true;
 }
+
+
 
 void PageMenu::checkMenu(float dt){
 
@@ -147,9 +148,6 @@ void PageMenu::checkMenu(float dt){
     if(m_originalMenu->getChildrenCount() > 0){
         updatePage();
     }
-}
-
-void PageMenu::checkInnerPages(float dt){
 
     for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){
         int visibleCount = 0;

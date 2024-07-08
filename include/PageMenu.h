@@ -23,7 +23,6 @@ class PAGES_API_DLL PageMenu : public CCMenu {
 
 protected:
     void checkMenu(float dt);
-    void checkInnerPages(float dt);
 
 private:
     int m_page = 0;

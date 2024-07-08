@@ -2,7 +2,6 @@
 #include "CCMenuItemSpriteExtra.h"
 
 PageMenu::~PageMenu() {
-    log::info("dtor!!");
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {

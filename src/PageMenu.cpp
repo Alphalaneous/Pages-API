@@ -147,6 +147,7 @@ void PageMenu::checkMenu(float dt){
 
     if(m_originalMenu->getChildrenCount() > 0){
         updatePage();
+        return;
     }
 
     for(CCMenu* page : CCArrayExt<CCMenu*>(m_pages)){

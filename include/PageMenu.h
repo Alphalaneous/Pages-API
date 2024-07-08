@@ -23,7 +23,7 @@ class PAGES_API_DLL PageMenu : public CCMenu {
 
 protected:
     void checkMenu(float dt);
-
+    void checkAttributes(float dt);
 private:
     int m_page = 0;
     int m_maxCount = 0;
@@ -42,6 +42,7 @@ private:
     bool m_finishedInit = false;
     bool m_forceScale = false;
     float m_forcedScale = 0;
+    CCDictionary* m_lastAttributes;
 public:
 
     Layout* m_layout;

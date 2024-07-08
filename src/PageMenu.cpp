@@ -6,6 +6,7 @@ PageMenu::~PageMenu() {
         m_pages->release();
         m_children->release();
         m_originalMenu->release();
+        m_lastAttributes->release();
     }
 }
 
@@ -32,6 +33,9 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
     m_children->retain();
+
+    m_lastAttributes = CCDictionary::create();
+    m_lastAttributes->retain();
 
     CCSize winSize = CCDirector::get()->getWinSize();
 
@@ -132,14 +136,55 @@ bool PageMenu::init(CCMenu* menu, int elementCount, bool forceContentSize) {
     addChild(m_navMenu);
     addChild(m_innerNode);
 
-    menu->setVisible(false);
-
     schedule(schedule_selector(PageMenu::checkMenu));
+    schedule(schedule_selector(PageMenu::checkAttributes));
 
     return true;
 }
 
+void PageMenu::checkAttributes(float dt){
 
+    attributeListen(PositionX);
+    attributeListen(PositionY);
+    attributeListen(ScaleX);
+    attributeListen(ScaleY);
+    attributeListen(SkewX);
+    attributeListen(SkewY);
+    attributeListen(RotationX);
+    attributeListen(RotationY);
+    attributeListen(ZOrder);
+    attributeListen(ContentWidth);
+    attributeListen(ContentHeight);
+
+    if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("Visible"))){
+        if(obj->getValue() != m_originalMenu->isVisible()){
+            setVisible(m_originalMenu->isVisible());
+        }
+    }
+    m_lastAttributes->setObject(CCBool::create(m_originalMenu->isVisible()), "Visible");
+
+    if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("IgnoreAnchorPointForPosition"))){
+        if(obj->getValue() != m_originalMenu->isIgnoreAnchorPointForPosition()){
+            ignoreAnchorPointForPosition(m_originalMenu->isIgnoreAnchorPointForPosition());
+        }
+    }
+    m_lastAttributes->setObject(CCBool::create(m_originalMenu->isIgnoreAnchorPointForPosition()), "IgnoreAnchorPointForPosition");
+
+    if(CCFloat* obj = typeinfo_cast<CCFloat*>(m_lastAttributes->objectForKey("AnchorPointX"))){
+        if(obj->getValue() != m_originalMenu->getAnchorPoint().x){
+            setAnchorPoint({m_originalMenu->getAnchorPoint().x, getAnchorPoint().y});
+        }
+    }
+    m_lastAttributes->setObject(CCFloat::create(m_originalMenu->isIgnoreAnchorPointForPosition()), "AnchorPointX");
+
+    if(CCFloat* obj = typeinfo_cast<CCFloat*>(m_lastAttributes->objectForKey("AnchorPointY"))){
+        if(obj->getValue() != m_originalMenu->getAnchorPoint().y){
+            setAnchorPoint({getAnchorPoint().x, m_originalMenu->getAnchorPoint().y});
+        }
+    }
+    m_lastAttributes->setObject(CCFloat::create(m_originalMenu->isIgnoreAnchorPointForPosition()), "AnchorPointY");
+
+}
 
 void PageMenu::checkMenu(float dt){
 

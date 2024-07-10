@@ -447,6 +447,14 @@ void PageMenu::setUniformScale(bool isUniform){
                 }
             }
         }
+
+        if(AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
+            layout->setAutoScale(false);
+        }
+
+        for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
+            page->updateLayout();
+        }
     }
 }
 

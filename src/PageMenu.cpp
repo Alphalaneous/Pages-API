@@ -234,7 +234,14 @@ void PageMenu::checkMenu(float dt){
 
 void PageMenu::setElementCount(int count){
 
-    m_maxCount = count;
+    if(CCObject* obj = m_originalMenu->getUserObject("element-count")){
+        if (CCInteger* count = typeinfo_cast<CCInteger*>(obj)){
+            m_maxCount = count->getValue();
+        }
+    }
+    else {
+        m_maxCount = count;
+    }
 
     if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
 

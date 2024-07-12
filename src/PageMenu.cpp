@@ -25,6 +25,12 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
             }
         }
     }
+    if(CCObject* obj = menu->getUserObject("element-count")){
+        if (CCInteger* count = typeinfo_cast<CCInteger*>(obj)){
+            elementCount = count->getValue();
+        }
+    }
+
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
 
@@ -37,7 +43,6 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
 
     m_innerNode = CCNode::create();
     m_innerNode->setContentSize(menu->getScaledContentSize());
-    //m_innerNode->setPosition(menu->getPosition());
     m_innerNode->ignoreAnchorPointForPosition(true);
     m_innerNode->setAnchorPoint(menu->getAnchorPoint());
     m_innerNode->setID("pages");
@@ -225,6 +230,15 @@ void PageMenu::checkMenu(float dt){
     }
 
     m_lastVisibleCount = visibleCount;
+}
+
+void PageMenu::setElementCount(int count){
+
+    m_maxCount = count;
+
+    if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
+
+    updatePage();
 }
 
 void PageMenu::updatePage() {
@@ -425,6 +439,7 @@ void PageMenu::setUniformScale(bool isUniform){
 
     if(!m_children) return;
     if(m_children->count() == 0) return;
+    if(m_pages->count() <= 1) return;
 
     if(isUniform){
 
@@ -461,6 +476,7 @@ void PageMenu::setUniformScale(bool isUniform){
 void PageMenu::setForceScale(bool force, float scale){
     m_forceScale = force;
     m_forcedScale = scale;
+    
     setUniformScale(m_isUniformScale);
 }
 

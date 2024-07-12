@@ -25,11 +25,12 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
 
         if(Mod::get()->getSettingValue<bool>("levelinfolayer-left-menu")){
             auto leftSideMenu = getChildByID("left-side-menu");
-            leftSideMenu->setContentSize({40, 120});
+            leftSideMenu->setContentSize({50, 150});
             leftSideMenu->setPosition({leftSideMenu->getPosition().x, leftSideMenu->getPosition().y + 20});
 
             m_fields->m_leftSidePage = PageMenu::create(typeinfo_cast<CCMenu*>(leftSideMenu), leftSideMenu->getLayout(), 3, false);
             m_fields->m_leftSidePage->setOrientation(PageOrientation::VERTICAL);
+            m_fields->m_leftSidePage->setNavGap(0);
             m_fields->m_leftSidePage->setUniformScale(true);
             m_fields->m_leftSidePage->setForceScale(true, 0.78f);
             addChild(m_fields->m_leftSidePage);

@@ -77,6 +77,7 @@ public:
     void setUniformScale(bool isUniform);
     void updatePage();
     void setForceScale(bool force, float scale);
+    void setElementCount(int count);
     CCMenu* createPage();
 };
 

@@ -61,6 +61,7 @@ public:
     bool init(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize);
     int getPageCount();
     float getNavGap();
+    CCArray* getPagedChildren();
     PageOrientation getPageOrientation();
     void goRight(CCObject* obj);
     void goLeft(CCObject* obj);

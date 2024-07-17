@@ -248,6 +248,10 @@ void PageMenu::setElementCount(int count){
     updatePage();
 }
 
+CCArray* PageMenu::getPagedChildren(){
+    return m_children;
+}
+
 void PageMenu::updatePage() {
 
     if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;

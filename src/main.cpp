@@ -8,9 +8,9 @@
 
 //#define IN_PROGRESS
 
-CCNode* CCNode_getChildByID_NOT_PAGES_APIS_FAULT_IF_YOU_CALL_GETCHILDBYID_ON_A_NULLPTR_OBJECT_PLEASE_DOUBLE_CHECK_YOUR_CODE_THANK_YOU(CCNode* self, std::string const& id) {
+CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
 
-    if (!self) return nullptr;
+    if (!self) return nullptr; //cuz people are dumb, I gotta check if they're calling the method on a nullptr
 
     if (CCNode* parent = self->getParent()) {
         if (PageMenu* page = typeinfo_cast<PageMenu*>(parent->getChildByID(fmt::format("paged-{}", self->getID())))) {
@@ -33,7 +33,7 @@ $execute {
                 geode::modifier::Resolve<std::string const&>::func(&CCNode::getChildByID)
             )
         ),
-        &CCNode_getChildByID_NOT_PAGES_APIS_FAULT_IF_YOU_CALL_GETCHILDBYID_ON_A_NULLPTR_OBJECT_PLEASE_DOUBLE_CHECK_YOUR_CODE_THANK_YOU,
+        &CCNode_getChildByID,
         "CCNode::getChildByID",
         tulip::hook::TulipConvention::Thiscall
     );

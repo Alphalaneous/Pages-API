@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_PAUSELAYER_H
-#define PAGE_PAUSELAYER_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include "../../include/PageMenu.h"
@@ -39,5 +36,3 @@ class $modify(PagePauseLayer, PauseLayer) {
         }
     }
 };
-
-#endif

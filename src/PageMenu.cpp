@@ -252,6 +252,17 @@ CCArray* PageMenu::getPagedChildren(){
     return m_children;
 }
 
+float PageMenu::getTotalWidth(){
+    return getContentSize().width + m_navGap * 2 + m_nextButton->getScaledContentSize().width * 2;
+}
+
+void PageMenu::setArrowScale(float scale){
+    m_nextButton->setScale(scale);
+    m_nextButton->m_baseScale = scale;
+    m_prevButton->setScale(scale);
+    m_prevButton->m_baseScale = scale;
+}
+
 void PageMenu::updatePage() {
 
     if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;

@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_CREATORLAYER_H
-#define PAGE_CREATORLAYER_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CreatorLayer.hpp>
 #include "../../include/PageMenu.h"
@@ -23,11 +20,10 @@ class $modify(PageCreatorLayer, CreatorLayer) {
             auto creatorButtonsMenu = getChildByID("creator-buttons-menu");
             creatorButtonsMenu->setContentSize({450, 270});
             PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(creatorButtonsMenu), creatorButtonsMenu->getLayout(), 15, true);
+            
             addChild(menuPage);
         }
 
         return true;
     }
 };
-
-#endif

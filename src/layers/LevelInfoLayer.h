@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_LEVELINFOLAYER_H
-#define PAGE_LEVELINFOLAYER_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include "../../include/PageMenu.h"
@@ -39,5 +36,3 @@ class $modify(PageLevelInfoLayer, LevelInfoLayer) {
         return true;
     }
 };
-
-#endif

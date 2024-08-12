@@ -5,7 +5,7 @@
         "android": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.1.11",
+    "version": "v1.2.0",
     "id": "alphalaneous.pages_api",
     "name": "Pages API",
     "developer": "Alphalaneous",
@@ -61,6 +61,12 @@
         "levelinfolayer-left-menu": {
             "name": "LevelInfoLayer Left Menu",
             "description": "Enable pages on the LevelInfoLayer left menu",
+            "type": "bool",
+            "default": true
+        },
+        "editor-build-tabs-menu": {
+            "name": "Editor Build Tabs Menu",
+            "description": "Enable pages on the Editor Build Tabs menu",
             "type": "bool",
             "default": true
         }

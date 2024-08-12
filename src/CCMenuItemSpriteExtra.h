@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_CCMENUITEM_H
-#define PAGE_CCMENUITEM_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CCMenuItemSpriteExtra.hpp>
 #include "../include/PageMenu.h"
@@ -98,5 +95,3 @@ class $modify(PageCCMenuItemSpriteExtra, CCMenuItemSpriteExtra) {
         #endif
     }
 };
-
-#endif

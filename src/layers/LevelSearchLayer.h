@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_LEVELSEARCHLAYER_H
-#define PAGE_LEVELSEARCHLAYER_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelSearchLayer.hpp>
 #include "../../include/PageMenu.h"
@@ -40,5 +37,3 @@ class $modify(PageLevelSearchLayer, LevelSearchLayer) {
         return true;
     }
 };
-
-#endif

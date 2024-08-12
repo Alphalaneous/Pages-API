@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef PAGE_MENULAYER_H
-#define PAGE_MENULAYER_H
-
 #include <Geode/Geode.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include "../../include/PageMenu.h"
@@ -42,5 +39,3 @@ class $modify(PageMenuLayer, MenuLayer) {
         return true;
     }
 };
-
-#endif

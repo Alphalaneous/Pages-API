@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef MENUPAGE_H
-#define MENUPAGE_H
-
 #include <Geode/Geode.hpp>
 
 #ifdef GEODE_IS_WINDOWS
@@ -79,7 +76,7 @@ public:
     void updatePage();
     void setForceScale(bool force, float scale);
     void setElementCount(int count);
+    void setArrowScale(float scale);
+    float getTotalWidth();
     CCMenu* createPage();
 };
-
-#endif

@@ -21,6 +21,7 @@ class $modify(PageEditorUI, EditorUI) {
             auto toolbarTogglesMenu = getChildByID("toolbar-toggles-menu");
             buildTabsMenu->setPositionY(toolbarTogglesMenu->getContentHeight());
             buildTabsMenu->setContentSize({480, 17.5});
+            buildTabsMenu->setAnchorPoint({0.5, 0});
             CCSize winSize = CCDirector::get()->getWinSize();
 
             PageMenu* menuPage = PageMenu::create(typeinfo_cast<CCMenu*>(buildTabsMenu), buildTabsMenu->getLayout(), 14, true);

@@ -46,7 +46,6 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     m_innerNode->ignoreAnchorPointForPosition(true);
     m_innerNode->setAnchorPoint(menu->getAnchorPoint());
     m_innerNode->setID("pages");
-    m_innerNode->setScale(menu->getScale());
 
     float scaleFactor = 1.2f;
 
@@ -316,6 +315,7 @@ void PageMenu::updatePage() {
         }
         if (searchPage->getChildrenCount() > 0) {
             searchPage->updateLayout();
+            searchPage->setScale(1);
             m_pages->addObject(searchPage);
         }
     }

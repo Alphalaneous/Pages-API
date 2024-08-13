@@ -19,7 +19,7 @@ class $modify(PageEditorUI, EditorUI) {
         if(Mod::get()->getSettingValue<bool>("editor-build-tabs-menu")){
             auto buildTabsMenu = getChildByID("build-tabs-menu");
             auto toolbarTogglesMenu = getChildByID("toolbar-toggles-menu");
-            buildTabsMenu->setPositionY(toolbarTogglesMenu->getContentHeight());
+            buildTabsMenu->setPositionY(toolbarTogglesMenu->getScaledContentSize().height);
             buildTabsMenu->setContentSize({480, 17.5});
             buildTabsMenu->setAnchorPoint({0.5, 0});
             CCSize winSize = CCDirector::get()->getWinSize();

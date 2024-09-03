@@ -158,6 +158,7 @@ void PageMenu::checkAttributes(float dt){
     attributeListen(ContentWidth);
     attributeListen(ContentHeight);
 
+
     if(lastScale != getScale() && m_scaleWhenFull){
         setUserObject("real-scale", CCFloat::create(m_originalMenu->getScale()));
         scaleWhenFull();
@@ -171,6 +172,7 @@ void PageMenu::checkAttributes(float dt){
     else {
         setVisible(m_originalMenu->isVisible());
     }
+
     m_lastAttributes->setObject(CCBool::create(m_originalMenu->isVisible()), "Visible");
 
     if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("IgnoreAnchorPointForPosition"))){
@@ -215,7 +217,7 @@ void PageMenu::checkMenu(float dt){
             return;
         }
     }
-    
+
     int visibleCount = 0;
 
     for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {

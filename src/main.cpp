@@ -5,7 +5,6 @@
 #include "layers/LevelInfoLayer.h"
 #include "layers/EditorUI.h"
 #include "CCMenuItemSpriteExtra.h"
-#include <Geode/modify/CCNode.hpp>
 
 //#define IN_PROGRESS
 
@@ -26,19 +25,6 @@ CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
 
     return self->getChildByID(id);
 }
-
-class $modify(CCNode) {
-
-    unsigned int getChildrenCount() {
-        if (CCNode* parent = getParent()) {
-            if (PageMenu* page = typeinfo_cast<PageMenu*>(parent->getChildByID(fmt::format("paged-{}", getID())))) {
-                int count = page->getPagedChildren()->count();
-                return count;
-            }
-        }
-        return CCNode::getChildrenCount();
-    }
-};
 
 $execute {
     (void) Mod::get()->hook(

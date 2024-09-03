@@ -209,11 +209,13 @@ void PageMenu::checkMenu(float dt){
 
     if (!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
 
-    if (m_originalMenu->getChildren()->count() > 0) {
-        updatePage();
-        return;
+    if (CCArray* arr = m_originalMenu->getChildren()) {
+        if (arr->count() > 0) {
+            updatePage();
+            return;
+        }
     }
-
+    
     int visibleCount = 0;
 
     for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {

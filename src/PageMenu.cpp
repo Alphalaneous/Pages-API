@@ -207,16 +207,16 @@ void PageMenu::checkAttributes(float dt){
 
 void PageMenu::checkMenu(float dt){
 
-    if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
+    if (!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
 
-    if(m_originalMenu->getChildrenCount() > 0){
+    if (m_originalMenu->getChildren()->count() > 0) {
         updatePage();
         return;
     }
 
     int visibleCount = 0;
 
-    for(CCNode* child : CCArrayExt<CCNode*>(m_children)){
+    for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
         if(child->isVisible()) visibleCount++;
         if(visibleCount > m_lastVisibleCount){
             updatePage();

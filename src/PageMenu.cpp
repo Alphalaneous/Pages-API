@@ -292,6 +292,8 @@ void PageMenu::updatePage() {
     int childrenCount = m_children->count();
     int pos = 0;
 
+    setUserObject("children-count"_spr, CCInteger::create(m_children->count()));
+
     for (int i = 0; i < pageCount; i++) {
 
         CCMenu* searchPage = createPage();

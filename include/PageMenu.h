@@ -40,6 +40,8 @@ private:
     bool m_finishedInit = false;
     bool m_forceScale = false;
     bool m_scaleWhenFull = false;
+    bool m_origAutoScale = true;
+    bool m_origIgnoreInvisible = true;
     float m_forcedScale = 0;
     Ref<CCDictionary> m_lastAttributes;
 public:

@@ -89,6 +89,10 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     setID(fmt::format("paged-{}", menu->getID()));
     if(layout){
         m_layout = layout;
+        if(AxisLayout* al = typeinfo_cast<AxisLayout*>(layout)) {
+            m_origAutoScale = al->getAutoScale();
+        }
+        m_origIgnoreInvisible = m_layout->isIgnoreInvisibleChildren();
         m_layout->ignoreInvisibleChildren(true);
     }
     else {
@@ -174,6 +178,25 @@ void PageMenu::checkAttributes(float dt){
     }
 
     m_lastAttributes->setObject(CCBool::create(m_originalMenu->isVisible()), "Visible");
+
+    if(CCBool* dp = typeinfo_cast<CCBool*>(m_originalMenu->getUserObject("disable-pages"))){
+        if(dp->getValue()){
+            for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
+                child->removeFromParentAndCleanup(false);
+                m_originalMenu->addChild(child);
+            }
+            if (m_layout) {
+                if (AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
+                    layout->setAutoScale(m_origAutoScale);
+                }
+                m_layout->ignoreInvisibleChildren(m_origIgnoreInvisible);
+            }
+            
+            m_originalMenu->updateLayout();
+            removeFromParentAndCleanup(true);
+            return;
+        }
+    }
 
     if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("IgnoreAnchorPointForPosition"))){
         if(obj->getValue() != m_originalMenu->isIgnoreAnchorPointForPosition()){
@@ -268,7 +291,8 @@ void PageMenu::setArrowScale(float scale){
 
 void PageMenu::updatePage() {
 
-    if(!m_isPage || !m_finishedInit || !m_children || !m_originalMenu) return;
+
+    if(!m_finishedInit || !m_children || !m_originalMenu) return;
 
     for(CCNode* node : CCArrayExt<CCNode*>(m_originalMenu->getChildren())){
         m_children->addObject(node);

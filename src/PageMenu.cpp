@@ -40,6 +40,7 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
 
     m_maxCount = elementCount;
     m_originalMenu = menu;
+    m_originalMenu->setUserObject("page-children"_spr, m_children);
 
     m_innerNode = CCNode::create();
     m_innerNode->setContentSize(menu->getScaledContentSize());

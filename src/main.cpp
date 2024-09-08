@@ -28,11 +28,11 @@ CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
 }
 
 class $modify(CCNode) {
-    void setVisible(bool visible){
-        CCNode::setVisible(visible);
+    CCRect boundingBox(){
         if (PageMenu* page = typeinfo_cast<PageMenu*>(this)) {
             page->disablePages();
         }
+        return CCNode::boundingBox();
     }
 };
 

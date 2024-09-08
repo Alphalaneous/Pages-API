@@ -147,6 +147,29 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     return true;
 }
 
+void PageMenu::disablePages(){
+    if(CCBool* dp = typeinfo_cast<CCBool*>(m_originalMenu->getUserObject("disable-pages"))){
+        if(dp->getValue()){
+            m_isPage = false;
+            unscheduleAllSelectors();
+            for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
+                child->removeFromParentAndCleanup(false);
+                m_originalMenu->addChild(child);
+            }
+            if (m_layout) {
+                if (AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
+                    layout->setAutoScale(m_origAutoScale);
+                }
+                m_layout->ignoreInvisibleChildren(m_origIgnoreInvisible);
+            }
+            removeAllChildren();
+            setID("");
+            m_originalMenu->updateLayout();
+            return;
+        }
+    }
+}
+
 void PageMenu::checkAttributes(float dt){
 
     float lastScale = getScale();
@@ -163,7 +186,6 @@ void PageMenu::checkAttributes(float dt){
     attributeListen(ContentWidth);
     attributeListen(ContentHeight);
 
-
     if(lastScale != getScale() && m_scaleWhenFull){
         setUserObject("real-scale", CCFloat::create(m_originalMenu->getScale()));
         scaleWhenFull();
@@ -179,25 +201,6 @@ void PageMenu::checkAttributes(float dt){
     }
 
     m_lastAttributes->setObject(CCBool::create(m_originalMenu->isVisible()), "Visible");
-
-    if(CCBool* dp = typeinfo_cast<CCBool*>(m_originalMenu->getUserObject("disable-pages"))){
-        if(dp->getValue()){
-            for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
-                child->removeFromParentAndCleanup(false);
-                m_originalMenu->addChild(child);
-            }
-            if (m_layout) {
-                if (AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
-                    layout->setAutoScale(m_origAutoScale);
-                }
-                m_layout->ignoreInvisibleChildren(m_origIgnoreInvisible);
-            }
-            
-            m_originalMenu->updateLayout();
-            removeFromParentAndCleanup(true);
-            return;
-        }
-    }
 
     if(CCBool* obj = typeinfo_cast<CCBool*>(m_lastAttributes->objectForKey("IgnoreAnchorPointForPosition"))){
         if(obj->getValue() != m_originalMenu->isIgnoreAnchorPointForPosition()){
@@ -291,7 +294,6 @@ void PageMenu::setArrowScale(float scale){
 }
 
 void PageMenu::updatePage() {
-
 
     if(!m_finishedInit || !m_children || !m_originalMenu) return;
 

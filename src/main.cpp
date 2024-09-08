@@ -5,6 +5,7 @@
 #include "layers/LevelInfoLayer.h"
 #include "layers/EditorUI.h"
 #include "CCMenuItemSpriteExtra.h"
+#include <Geode/modify/CCNode.hpp>
 
 //#define IN_PROGRESS
 
@@ -25,6 +26,15 @@ CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
 
     return self->getChildByID(id);
 }
+
+class $modify(CCNode) {
+    void setVisible(bool visible){
+        CCNode::setVisible(visible);
+        if (PageMenu* page = typeinfo_cast<PageMenu*>(this)) {
+            page->disablePages();
+        }
+    }
+};
 
 $execute {
     (void) Mod::get()->hook(

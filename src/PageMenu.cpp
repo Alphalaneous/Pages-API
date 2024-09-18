@@ -144,30 +144,29 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     schedule(schedule_selector(PageMenu::checkMenu));
     schedule(schedule_selector(PageMenu::checkAttributes));
 
+    m_originalMenu->setUserObject("disable"_spr, CCMenuItem::create(this, menu_selector(PageMenu::disablePages)));
+
     return true;
 }
 
-void PageMenu::disablePages(){
-    if(CCBool* dp = typeinfo_cast<CCBool*>(m_originalMenu->getUserObject("disable-pages"))){
-        if(dp->getValue()){
-            m_isPage = false;
-            unscheduleAllSelectors();
-            for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
-                child->removeFromParentAndCleanup(false);
-                m_originalMenu->addChild(child);
-            }
-            if (m_layout) {
-                if (AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
-                    layout->setAutoScale(m_origAutoScale);
-                }
-                m_layout->ignoreInvisibleChildren(m_origIgnoreInvisible);
-            }
-            removeAllChildren();
-            setID("");
-            m_originalMenu->updateLayout();
-            return;
-        }
+void PageMenu::disablePages(CCObject* obj){
+    
+    m_isPage = false;
+    unscheduleAllSelectors();
+    for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
+        child->removeFromParentAndCleanup(false);
+        m_originalMenu->addChild(child);
     }
+    if (m_layout) {
+        if (AxisLayout* layout = typeinfo_cast<AxisLayout*>(m_layout.data())){
+            layout->setAutoScale(m_origAutoScale);
+        }
+        m_layout->ignoreInvisibleChildren(m_origIgnoreInvisible);
+    }
+    removeAllChildren();
+    setID("");
+    m_originalMenu->updateLayout();
+    return;
 }
 
 void PageMenu::checkAttributes(float dt){

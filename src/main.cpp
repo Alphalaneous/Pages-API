@@ -27,15 +27,6 @@ CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
     return self->getChildByID(id);
 }
 
-class $modify(CCNode) {
-    CCRect boundingBox(){
-        if (PageMenu* page = typeinfo_cast<PageMenu*>(this)) {
-            page->disablePages();
-        }
-        return CCNode::boundingBox();
-    }
-};
-
 $execute {
     (void) Mod::get()->hook(
         reinterpret_cast<void*>(

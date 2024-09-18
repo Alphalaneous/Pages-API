@@ -79,7 +79,7 @@ public:
     void setForceScale(bool force, float scale);
     void setElementCount(int count);
     void setArrowScale(float scale);
-    void disablePages();
+    void disablePages(CCObject* obj);
     float getTotalWidth();
     CCMenu* createPage();
 };

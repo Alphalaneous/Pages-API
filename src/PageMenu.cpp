@@ -144,7 +144,7 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     schedule(schedule_selector(PageMenu::checkMenu));
     schedule(schedule_selector(PageMenu::checkAttributes));
 
-    m_originalMenu->setUserObject("disable"_spr, CCMenuItem::create(this, menu_selector(PageMenu::disablePages)));
+    m_originalMenu->setUserObject("disable"_spr, CCMenuItemSpriteExtra::create(CCNode::create(), this, menu_selector(PageMenu::disablePages)));
 
     return true;
 }

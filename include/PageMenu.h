@@ -30,7 +30,7 @@ private:
     bool m_isPage = true;
     bool m_forceContentSize = false;
     bool m_isUniformScale = false;
-    Ref<CCMenu> m_originalMenu;
+    CCMenu* m_originalMenu; //should always be in the scene tree, NEVER REMOVE unless you want crashes
     Ref<CCMenu> m_navMenu;
     Ref<CCArray> m_children;
     PageOrientation m_pageOrientation = PageOrientation::HORIZONTAL;

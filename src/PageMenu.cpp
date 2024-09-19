@@ -78,7 +78,6 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     m_doneButton->addChild(m_buttonBG);
     m_doneButton->addChild(m_doneLabel);
 
-
     m_doneLabel->setOpacity(0);
     m_buttonBG->setOpacity(0);
 
@@ -139,7 +138,7 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     addChild(m_navMenu);
     addChild(m_innerNode);
 
-    setUserObject("real-scale", CCFloat::create(1));
+    setUserObject("real-scale"_spr, CCFloat::create(1));
 
     schedule(schedule_selector(PageMenu::checkMenu));
     schedule(schedule_selector(PageMenu::checkAttributes));
@@ -153,6 +152,8 @@ void PageMenu::disablePages(CCObject* obj){
     
     m_isPage = false;
     unscheduleAllSelectors();
+    m_originalMenu->setUserObject("children-count"_spr, nullptr);
+
     for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {
         child->removeFromParentAndCleanup(false);
         m_originalMenu->addChild(child);
@@ -186,7 +187,7 @@ void PageMenu::checkAttributes(float dt){
     attributeListen(ContentHeight);
 
     if(lastScale != getScale() && m_scaleWhenFull){
-        setUserObject("real-scale", CCFloat::create(m_originalMenu->getScale()));
+        setUserObject("real-scale"_spr, CCFloat::create(m_originalMenu->getScale()));
         scaleWhenFull();
     }
 
@@ -330,7 +331,6 @@ void PageMenu::updatePage() {
             }
 
             if(CCNode* child =  typeinfo_cast<CCNode*>(m_children->objectAtIndex(pos))){
-                child->setUserObject("page-menu", CCBool::create(true));
                 childrenCount--;
                 if (!child->isVisible()) elementCount++;
 
@@ -402,7 +402,6 @@ void PageMenu::addPagedChild(CCNode* child) {
 
     bool childWasAdded = false;
     if (m_maxCount == 0) return;
-    child->setUserObject("page-menu", CCBool::create(true));
     m_children->addObject(child);
 
     for (CCMenu* page : CCArrayExt<CCMenu*>(m_pages)) {
@@ -587,7 +586,7 @@ void PageMenu::scaleWhenFull() {
     }
 
     if (doShrink && m_pages->count() > 1) {
-        setScale(typeinfo_cast<CCFloat*>(getUserObject("real-scale"))->getValue() * 0.85f);
+        setScale(typeinfo_cast<CCFloat*>(getUserObject("real-scale"_spr))->getValue() * 0.85f);
     }
 }
 

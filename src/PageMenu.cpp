@@ -377,7 +377,6 @@ void PageMenu::updatePage() {
     if(m_scaleWhenFull){
         scaleWhenFull();
     }
-    handleTouchPriority(this);
 }
 
 CCMenu* PageMenu::createPage() {
@@ -543,7 +542,6 @@ void PageMenu::goLeft(CCObject* obj) {
     }
     
     setPageVisible();
-    handleTouchPriority(this);
 }
 
 void PageMenu::goRight(CCObject* obj) {
@@ -555,7 +553,6 @@ void PageMenu::goRight(CCObject* obj) {
         m_page = 0;
     }
     setPageVisible();
-    handleTouchPriority(this);
 }
 
 void PageMenu::setPageVisible() {

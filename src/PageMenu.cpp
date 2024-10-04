@@ -5,6 +5,12 @@ PageMenu::~PageMenu() {
 }
 
 PageMenu* PageMenu::create(CCMenu* menu, Layout* layout, int elementCount, bool forceContentSize) {
+
+    if (PageMenu* pageMenu = typeinfo_cast<PageMenu*>(menu->getParent()->getChildByID(fmt::format("paged-{}", menu->getID())))) {
+        pageMenu->removeFromParentAndCleanup(false);
+        return pageMenu;
+    }
+
     auto node = new PageMenu();
     if (!node->init(menu, layout, elementCount, forceContentSize)) {
         CC_SAFE_DELETE(node);
@@ -30,8 +36,6 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
             elementCount = count->getValue();
         }
     }
-
-    menu->getParent()->removeChildByID(fmt::format("paged-{}", menu->getID()));
 
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();

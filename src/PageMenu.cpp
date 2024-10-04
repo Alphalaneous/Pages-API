@@ -31,6 +31,8 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
         }
     }
 
+    menu->getParent()->removeChildByID(fmt::format("paged-{}", menu->getID()));
+
     m_forceContentSize = forceContentSize;
     m_children = CCArray::create();
 

@@ -3,7 +3,7 @@
 
 //#define IN_PROGRESS
 
-CCNode* CCNode_getChildByID(CCNode* self, std::string const& id) {
+CCNode* CCNode_getChildByID(CCNode* self, std::string_view id) {
 
     if (!self) return nullptr; //cuz people are dumb, I gotta check if they're calling the method on a nullptr
 
@@ -23,7 +23,7 @@ $execute {
     (void) Mod::get()->hook(
         reinterpret_cast<void*>(
             geode::addresser::getNonVirtual(
-                geode::modifier::Resolve<std::string const&>::func(&CCNode::getChildByID)
+                geode::modifier::Resolve<std::string_view>::func(&CCNode::getChildByID)
             )
         ),
         &CCNode_getChildByID,

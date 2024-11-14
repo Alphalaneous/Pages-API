@@ -157,7 +157,9 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
 void PageMenu::disablePages(CCObject* obj){
     
     m_isPage = false;
-    unscheduleAllSelectors();
+    unschedule(schedule_selector(PageMenu::checkMenu));
+    unschedule(schedule_selector(PageMenu::checkAttributes));
+
     m_originalMenu->setUserObject("children-count"_spr, nullptr);
 
     for (CCNode* child : CCArrayExt<CCNode*>(m_children)) {

@@ -342,7 +342,7 @@ void PageMenu::updatePage() {
 
                 if (m_forceContentSize) {
                     child->setContentSize(contentSize);
-                    if(CCSprite* spr = getChildOfType<CCSprite>(child, 0)){
+                    if(CCSprite* spr = child->getChildByType<CCSprite>(0)){
                         spr->setAnchorPoint({1, 0});
                         spr->setPosition({contentSize.width, 0});
                     }

@@ -44,7 +44,7 @@ private:
     geode::Ref<cocos2d::CCDictionary> m_lastAttributes;
 public:
 
-    geode::Ref<cocos2d::Layout> m_layout;
+    geode::Ref<geode::Layout> m_layout;
     geode::Ref<cocos2d::CCNode> m_innerNode;
     geode::Ref<CCMenuItemSpriteExtra> m_nextButton;
     geode::Ref<CCMenuItemSpriteExtra> m_prevButton;
@@ -54,8 +54,8 @@ public:
     geode::Ref<cocos2d::CCArray> m_pages;
 
     ~PageMenu();
-    static PageMenu* create(cocos2d::CCMenu* menu, cocos2d::Layout* layout, int elementCount, bool forceContentSize = false);
-    bool init(cocos2d::CCMenu* menu, cocos2d::Layout* layout, int elementCount, bool forceContentSize);
+    static PageMenu* create(cocos2d::CCMenu* menu, geode::Layout* layout, int elementCount, bool forceContentSize = false);
+    bool init(cocos2d::CCMenu* menu, geode::Layout* layout, int elementCount, bool forceContentSize);
     int getPageCount();
     float getNavGap();
     cocos2d::CCArray* getPagedChildren();
@@ -66,7 +66,7 @@ public:
     void scaleWhenFull();
     void setNavGap(float gapSize);
     void setOrientation(PageOrientation orientation);
-    void setPageLayout(cocos2d::Layout* layout);
+    void setPageLayout(geode::Layout* layout);
     void addPagedChild(cocos2d::CCNode* child);
     void startShakeChildren();
     void stopShakeChildren();

@@ -61,6 +61,7 @@ bool PageMenu::init(CCMenu* menu, Layout* layout, int elementCount, bool forceCo
     m_background->setPosition({m_innerNode->getContentSize().width/2, m_innerNode->getContentSize().height/2});
     m_background->setOpacity(0.0f);
     m_background->setScale(1/scaleFactor);
+    m_background->setVisible(false);
     addChild(m_background);
 
     float buttonScaleFactor = 3.5f;

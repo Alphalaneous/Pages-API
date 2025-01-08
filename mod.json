@@ -1,11 +1,11 @@
 {
-    "geode": "4.0.1",
+    "geode": "4.1.1",
     "gd": {
         "win": "2.2074",
         "android": "2.2074",
         "mac": "2.2074"
     },
-    "version": "v1.3.3",
+    "version": "v1.4.0",
     "id": "alphalaneous.pages_api",
     "name": "Pages API",
     "developer": "Alphalaneous",
@@ -13,7 +13,7 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": ">=v1.15.0",
+            "version": ">=v1.18.0",
             "importance": "required"
         }
     ],

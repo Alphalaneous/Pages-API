@@ -28,11 +28,11 @@ public:
         float m_max;
         float m_padding;
         float m_buttonScale = 0.75;
+        float m_lastChildrenCount;
     };
     void setPaged(int count, PageOrientation orientation, float max, float padding = 4);
     void setPage(int pageNum);
-    void addChild(cocos2d::CCNode* child, int zOrder, int tag);
-    void removeChild(cocos2d::CCNode* child, bool cleanup);
+    void checkChildren(float dt);
     void setElementCount(int count);
     void setOrientation(PageOrientation orientation);
     void setMax(float max);

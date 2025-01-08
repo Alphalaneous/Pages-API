@@ -3,18 +3,12 @@
 
 using namespace geode::prelude;
 
-void PageMenu::addChild(CCNode* child, int zOrder, int tag) {
-    CCMenu::addChild(child, zOrder, tag);
+void PageMenu::checkChildren(float dt) {
     auto fields = m_fields.self();
     if (!fields->m_paged) return;
-    setPaged(fields->m_elementCount, fields->m_orientation, fields->m_max, fields->m_padding);
-}
-
-void PageMenu::removeChild(CCNode* child, bool cleanup) {
-    CCMenu::removeChild(child, cleanup);
-    auto fields = m_fields.self();
-    if (!fields->m_paged) return;
-    setPaged(fields->m_elementCount, fields->m_orientation, fields->m_max, fields->m_padding);
+    if (fields->m_lastChildrenCount != getChildrenCount()) {
+        setPaged(fields->m_elementCount, fields->m_orientation, fields->m_max, fields->m_padding);
+    }
 }
 
 void PageMenu::setElementCount(int count) {
@@ -87,11 +81,14 @@ void PageMenu::setPaged(int count, PageOrientation orientation, float max, float
         fields->m_pages = CCArray::create();
     }
     fields->m_paged = true;
+    fields->m_lastChildrenCount = getChildrenCount();
     fields->m_max = max;
     fields->m_padding = padding;
     fields->m_elementCount = count;
     fields->m_orientation = orientation;
     fields->m_pageCount = std::ceil(getChildrenCount()/(double)count);
+
+    schedule(schedule_selector(PageMenu::checkChildren));
 
     for (int i = 0; i < fields->m_pageCount; i++) {
         CCArray* page = CCArray::create();

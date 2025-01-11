@@ -9,6 +9,12 @@ void PageMenu::checkChildren(float dt) {
     if (fields->m_lastChildrenCount != getChildrenCount()) {
         setPaged(fields->m_elementCount, fields->m_orientation, fields->m_max, fields->m_padding);
     }
+    if (fields->m_paged && fields->m_arrowsMenu) {
+        fields->m_arrowsMenu->setPosition(getPosition());
+        fields->m_arrowsMenu->setVisible(isVisible());
+        fields->m_arrowsMenu->ignoreAnchorPointForPosition(false);
+        fields->m_arrowsMenu->setAnchorPoint(getAnchorPoint());
+    }
 }
 
 void PageMenu::setElementCount(int count) {

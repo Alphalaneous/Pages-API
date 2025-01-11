@@ -128,36 +128,36 @@ void PageMenu::addArrowButtons() {
 
     fields->m_arrowsMenu = CCMenu::create();
 
-    CCSprite* m_nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    m_nextSprite->setFlipX(true);
-    m_nextSprite->setScale(fields->m_buttonScale);
-    CCMenuItemSpriteExtra* m_nextButton = CCMenuItemSpriteExtra::create(m_nextSprite, this, menu_selector(PageMenu::nextPage));
-    m_nextButton->setID("next-button");
+    CCSprite* nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    nextSprite->setFlipX(true);
+    nextSprite->setScale(fields->m_buttonScale);
+    CCMenuItemSpriteExtra* nextButton = CCMenuItemSpriteExtra::create(nextSprite, this, menu_selector(PageMenu::nextPage));
+    nextButton->setID("next-button");
 
-    float buttonWidth = m_nextButton->getScaledContentWidth();
+    fields->m_buttonWidth = nextButton->getScaledContentWidth();
 
-    CCSprite* m_prevSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    m_prevSprite->setScale(fields->m_buttonScale);
-    CCMenuItemSpriteExtra* m_prevButton = CCMenuItemSpriteExtra::create(m_prevSprite, this, menu_selector(PageMenu::prevPage));
-    m_prevButton->setID("prev-button");
+    CCSprite* prevSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    prevSprite->setScale(fields->m_buttonScale);
+    CCMenuItemSpriteExtra* prevButton = CCMenuItemSpriteExtra::create(prevSprite, this, menu_selector(PageMenu::prevPage));
+    prevButton->setID("prev-button");
     
     fields->m_arrowsMenu->setID(fmt::format("{}-navigation-menu", getID()));
     fields->m_arrowsMenu->ignoreAnchorPointForPosition(false);
     fields->m_arrowsMenu->setPosition(getPosition());
     fields->m_arrowsMenu->setScale(getScale());
     fields->m_arrowsMenu->setAnchorPoint(getAnchorPoint());
-    fields->m_arrowsMenu->addChild(m_nextButton);
-    fields->m_arrowsMenu->addChild(m_prevButton);
+    fields->m_arrowsMenu->addChild(nextButton);
+    fields->m_arrowsMenu->addChild(prevButton);
 
     if (fields->m_orientation == PageOrientation::HORIZONTAL) {
 
-        fields->m_arrowsMenu->setContentSize({getContentWidth() + buttonWidth * 2 + fields->m_padding * 2, getContentHeight()});
+        fields->m_arrowsMenu->setContentSize({getContentWidth() + fields->m_buttonWidth * 2 + fields->m_padding * 2, getContentHeight()});
 
-        m_prevButton->setPositionX(buttonWidth/2);
-        m_prevButton->setPositionY(fields->m_arrowsMenu->getContentHeight()/2);
+        prevButton->setPositionX(fields->m_buttonWidth/2);
+        prevButton->setPositionY(fields->m_arrowsMenu->getContentHeight()/2);
 
-        m_nextButton->setPositionX(fields->m_arrowsMenu->getContentWidth() - buttonWidth/2);
-        m_nextButton->setPositionY(fields->m_arrowsMenu->getContentHeight()/2);
+        nextButton->setPositionX(fields->m_arrowsMenu->getContentWidth() - fields->m_buttonWidth/2);
+        nextButton->setPositionY(fields->m_arrowsMenu->getContentHeight()/2);
 
         if (fields->m_arrowsMenu->getScaledContentWidth() > fields->m_max) {
             float scaleFactor = fields->m_max/fields->m_arrowsMenu->getScaledContentWidth();
@@ -166,16 +166,16 @@ void PageMenu::addArrowButtons() {
         }
     }
     else {
-        fields->m_arrowsMenu->setContentSize({getContentWidth(), getContentHeight() + buttonWidth * 2 + fields->m_padding * 2});
+        fields->m_arrowsMenu->setContentSize({getContentWidth(), getContentHeight() + fields->m_buttonWidth * 2 + fields->m_padding * 2});
 
-        m_prevButton->setRotation(90);
-        m_nextButton->setRotation(90);
+        prevButton->setRotation(90);
+        nextButton->setRotation(90);
 
-        m_nextButton->setPositionX(fields->m_arrowsMenu->getContentWidth()/2);
-        m_nextButton->setPositionY(buttonWidth/2);
+        nextButton->setPositionX(fields->m_arrowsMenu->getContentWidth()/2);
+        nextButton->setPositionY(fields->m_buttonWidth/2);
 
-        m_prevButton->setPositionX(fields->m_arrowsMenu->getContentWidth()/2);
-        m_prevButton->setPositionY(fields->m_arrowsMenu->getContentHeight() - buttonWidth/2);
+        prevButton->setPositionX(fields->m_arrowsMenu->getContentWidth()/2);
+        prevButton->setPositionY(fields->m_arrowsMenu->getContentHeight() - fields->m_buttonWidth/2);
 
         if (fields->m_arrowsMenu->getScaledContentHeight() > fields->m_max) {
             float scaleFactor = fields->m_max/fields->m_arrowsMenu->getScaledContentHeight() ;

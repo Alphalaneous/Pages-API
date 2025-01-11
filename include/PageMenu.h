@@ -29,6 +29,7 @@ public:
         float m_padding;
         float m_buttonScale = 0.75;
         float m_lastChildrenCount;
+        float m_buttonWidth;
     };
     void setPaged(int count, PageOrientation orientation, float max, float padding = 4);
     void setPage(int pageNum);

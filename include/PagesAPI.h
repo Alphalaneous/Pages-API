@@ -1,6 +1,10 @@
 #pragma once
 
-#include <Geode/Geode.hpp>
+#include <Geode/cocos/cocoa/CCObject.h>
+#include <Geode/cocos/cocoa/CCInteger.h>
+#include <Geode/cocos/cocoa/CCFloat.h>
+#include <Geode/cocos/actions/CCActionInstant.h>
+#include <Geode/cocos/menu_nodes/CCMenu.h>
 
 enum PageOrientation{ VERTICAL, HORIZONTAL };
 

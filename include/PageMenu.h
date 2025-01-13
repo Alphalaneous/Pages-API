@@ -1,6 +1,8 @@
 #pragma once
 
-#include <Geode/Geode.hpp>
+#include <Geode/cocos/cocoa/CCObject.h>
+#include <Geode/cocos/menu_nodes/CCMenu.h>
+#include <Geode/utils/cocos.hpp>
 #include <Geode/modify/CCMenu.hpp>
 #include "PagesAPI.h"
 

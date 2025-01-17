@@ -92,7 +92,16 @@ void PageMenu::setPaged(int count, PageOrientation orientation, float max, float
     fields->m_padding = padding;
     fields->m_elementCount = count;
     fields->m_orientation = orientation;
-    fields->m_pageCount = std::ceil(getChildrenCount()/(double)count);
+
+    CCArray* validChildren = CCArray::create();
+    for (CCNode* child : CCArrayExt<CCNode*>(getChildren())) {
+        if (child->isVisible() || child->getUserObject("was-visible"_spr)) {
+            validChildren->addObject(child);
+            child->setUserObject("was-visible"_spr, CCBool::create(true));
+        }
+    }
+
+    fields->m_pageCount = std::ceil(validChildren->count()/(double)count);
 
     schedule(schedule_selector(PageMenu::checkChildren));
 
@@ -101,8 +110,8 @@ void PageMenu::setPaged(int count, PageOrientation orientation, float max, float
         int counter = count;
         for (int j = 0; j < counter; j++) {
             int pos = j + (i * count);
-            if (pos >= getChildrenCount()) break;
-            CCNode* node = static_cast<CCNode*>(getChildren()->objectAtIndex(pos));
+            if (pos >= validChildren->count()) break;
+            CCNode* node = static_cast<CCNode*>(validChildren->objectAtIndex(pos));
             page->addObject(node);
         }
         fields->m_pages->addObject(page);

@@ -58,9 +58,16 @@ void PageMenu::enablePages(bool enabled) {
     }
 }
 
-void PageMenu::setFixed(bool fixed) {
+void PageMenu::setFixed(float max) {
+    auto fields = m_fields.self();
     if (AxisLayout* axisLayout = typeinfo_cast<AxisLayout*>(getLayout())) {
-        axisLayout->setCrossAxisOverflow(!fixed);
+        axisLayout->setCrossAxisOverflow(false);
+    }
+    if (fields->m_orientation == PageOrientation::VERTICAL) {
+        setContentWidth(max);
+    }
+    else {
+        setContentHeight(max);
     }
 }
 

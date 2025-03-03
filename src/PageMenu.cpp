@@ -3,6 +3,15 @@
 
 using namespace geode::prelude;
 
+CCPoint getNodeCenter(CCNode* node) {
+    CCPoint pos = node->getPosition();
+    CCSize size = node->getScaledContentSize();
+    CCPoint anchor = node->getAnchorPoint();
+
+    return {pos.x + size.width * (0.5f - anchor.x),
+               pos.y + size.height * (0.5f - anchor.y)};
+}
+
 void PageMenu::checkChildren(float dt) {
     auto fields = m_fields.self();
     if (!fields->m_paged) return;
@@ -10,10 +19,10 @@ void PageMenu::checkChildren(float dt) {
         setPaged(fields->m_elementCount, fields->m_orientation, fields->m_max, fields->m_padding);
     }
     if (fields->m_paged && fields->m_arrowsMenu) {
-        fields->m_arrowsMenu->setPosition(getPosition());
+        fields->m_arrowsMenu->setPosition(getNodeCenter(this));
         fields->m_arrowsMenu->setVisible(isVisible());
         fields->m_arrowsMenu->ignoreAnchorPointForPosition(false);
-        fields->m_arrowsMenu->setAnchorPoint(getAnchorPoint());
+        fields->m_arrowsMenu->setZOrder(getZOrder());
     }
 }
 
@@ -119,6 +128,9 @@ void PageMenu::setPaged(int count, PageOrientation orientation, float max, float
 
     setPage(fields->m_currentPage);
     if (Layout* layout = getLayout()) {
+        if (AxisLayout* axisLayout = typeinfo_cast<AxisLayout*>(layout)) {
+            axisLayout->setCrossAxisOverflow(false);
+        }
         layout->ignoreInvisibleChildren(true);
     }
     updateLayout();
@@ -152,9 +164,8 @@ void PageMenu::addArrowButtons() {
     
     fields->m_arrowsMenu->setID(fmt::format("{}-navigation-menu", getID()));
     fields->m_arrowsMenu->ignoreAnchorPointForPosition(false);
-    fields->m_arrowsMenu->setPosition(getPosition());
+    fields->m_arrowsMenu->setPosition(getNodeCenter(this));
     fields->m_arrowsMenu->setScale(getScale());
-    fields->m_arrowsMenu->setAnchorPoint(getAnchorPoint());
     fields->m_arrowsMenu->addChild(nextButton);
     fields->m_arrowsMenu->addChild(prevButton);
 

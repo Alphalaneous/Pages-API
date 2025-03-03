@@ -41,6 +41,7 @@ public:
     void setMax(float max);
     void enablePages(bool enable);
     void setButtonScale(float scale);
+    void setFixed(bool fixed);
 
 private:
     void nextPage(cocos2d::CCObject* obj);

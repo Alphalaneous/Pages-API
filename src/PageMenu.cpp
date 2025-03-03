@@ -58,6 +58,12 @@ void PageMenu::enablePages(bool enabled) {
     }
 }
 
+void PageMenu::setFixed(bool fixed) {
+    if (AxisLayout* axisLayout = typeinfo_cast<AxisLayout*>(getLayout())) {
+        axisLayout->setCrossAxisOverflow(!fixed);
+    }
+}
+
 void PageMenu::setButtonScale(float scale) {
     auto fields = m_fields.self();
 
@@ -128,9 +134,6 @@ void PageMenu::setPaged(int count, PageOrientation orientation, float max, float
 
     setPage(fields->m_currentPage);
     if (Layout* layout = getLayout()) {
-        if (AxisLayout* axisLayout = typeinfo_cast<AxisLayout*>(layout)) {
-            axisLayout->setCrossAxisOverflow(false);
-        }
         layout->ignoreInvisibleChildren(true);
     }
     updateLayout();

@@ -252,5 +252,5 @@ void PageMenu::prevPage(CCObject* obj) {
     m_fields->m_prevCallback(obj);
 }
 
-void setNextCallback(std::function<void(CCObject*)> callback) {m_fields->m_nextCallback = callback;}
-void setPrevCallback(std::function<void(CCObject*)> callback) {m_fields->m_prevCallback = callback;}
+void PageMenu::setNextCallback(std::function<void(CCObject*)> callback) {m_fields->m_nextCallback = callback;}
+void PageMenu::setPrevCallback(std::function<void(CCObject*)> callback) {m_fields->m_prevCallback = callback;}

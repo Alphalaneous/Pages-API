@@ -12,8 +12,8 @@
     #else
         #define PAGES_API_DLL __declspec(dllimport)
     #endif
-    #else
-        #define PAGES_API_DLL __attribute__((visibility("default")))
+#else
+    #define PAGES_API_DLL __attribute__((visibility("default")))
 #endif
 
 struct PAGES_API_DLL PageMenu : public geode::Modify<PageMenu, cocos2d::CCMenu> {

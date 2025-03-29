@@ -32,6 +32,9 @@ public:
         float m_buttonScale = 0.75;
         float m_lastChildrenCount;
         float m_buttonWidth;
+
+        std::function<void(CCObject*)> nextCallback;
+        std::function<void(CCObject*)> prevCallback;
     };
     void setPaged(int count, PageOrientation orientation, float max, float padding = 4);
     void setPage(int pageNum);
@@ -42,6 +45,9 @@ public:
     void enablePages(bool enable);
     void setButtonScale(float scale);
     void setFixed(float max);
+
+    void setNextCallback(std::function<void(CCObject*)> callback);
+    void setPrevCallback(std::function<void(CCObject*)> callback);
 
 private:
     void nextPage(cocos2d::CCObject* obj);

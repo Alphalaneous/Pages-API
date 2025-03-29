@@ -239,6 +239,8 @@ void PageMenu::nextPage(CCObject* obj) {
     fields->m_currentPage++;
     if (fields->m_currentPage >= fields->m_pageCount) fields->m_currentPage = 0;
     setPage(fields->m_currentPage);
+
+    m_fields->m_nextCallback(obj);
 }
 
 void PageMenu::prevPage(CCObject* obj) {
@@ -246,4 +248,9 @@ void PageMenu::prevPage(CCObject* obj) {
     fields->m_currentPage--;
     if (fields->m_currentPage < 0) fields->m_currentPage = fields->m_pageCount - 1;
     setPage(fields->m_currentPage);
+
+    m_fields->m_prevCallback(obj);
 }
+
+void setNextCallback(std::function<void(CCObject*)> callback) {m_fields->m_nextCallback = callback;}
+void setPrevCallback(std::function<void(CCObject*)> callback) {m_fields->m_prevCallback = callback;}

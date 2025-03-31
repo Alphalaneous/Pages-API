@@ -33,8 +33,8 @@ public:
         float m_lastChildrenCount;
         float m_buttonWidth;
 
-        std::function<void(CCObject*)> m_nextCallback;
-        std::function<void(CCObject*)> m_prevCallback;
+        std::function<void(CCObject*)> m_nextCallback = [](CCObject* obj) {};
+        std::function<void(CCObject*)> m_prevCallback = [](CCObject* obj) {};
     };
     void setPaged(int count, PageOrientation orientation, float max, float padding = 4);
     void setPage(int pageNum);

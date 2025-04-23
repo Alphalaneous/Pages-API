@@ -12,8 +12,8 @@
     #else
         #define PAGES_API_DLL __declspec(dllimport)
     #endif
-    #else
-        #define PAGES_API_DLL __attribute__((visibility("default")))
+#else
+    #define PAGES_API_DLL __attribute__((visibility("default")))
 #endif
 
 struct PAGES_API_DLL PageMenu : public geode::Modify<PageMenu, cocos2d::CCMenu> {
@@ -32,6 +32,9 @@ public:
         float m_buttonScale = 0.75;
         float m_lastChildrenCount;
         float m_buttonWidth;
+
+        std::function<void(CCObject*)> m_nextCallback = [](CCObject* obj) {};
+        std::function<void(CCObject*)> m_prevCallback = [](CCObject* obj) {};
     };
     void setPaged(int count, PageOrientation orientation, float max, float padding = 4);
     void setPage(int pageNum);
@@ -42,6 +45,9 @@ public:
     void enablePages(bool enable);
     void setButtonScale(float scale);
     void setFixed(float max);
+
+    void setNextCallback(std::function<void(CCObject*)> callback);
+    void setPrevCallback(std::function<void(CCObject*)> callback);
 
 private:
     void nextPage(cocos2d::CCObject* obj);
